@@ -1,0 +1,30 @@
+#Internal package file, do not edit.
+#Thu Jan 19 21:15:36 PST 2017
+2.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+5.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/raw/ladygaga.txt
+5.set=ANDROID_RESOURCE
+3.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+6.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/raw/rebeccablack.txt
+2.set=ANDROID_RESOURCE
+4.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+7.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/layout-large-v4/main_activity.xml
+7.set=ANDROID_RESOURCE
+count=9
+0.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/drawable-xhdpi-v4/ic_launcher.png
+5.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+8.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/raw/taylorswift.txt
+4.set=ANDROID_RESOURCE
+6.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+1.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/layout/main_activity.xml
+1.set=ANDROID_RESOURCE
+7.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+2.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/AndroidManifest.xml
+6.set=ANDROID_RESOURCE
+0.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+8.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+3.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/resources.arsc
+3.set=ANDROID_RESOURCE
+1.base=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_
+4.file=/Users/hyan/AndroidStudioProjects/Lab3c_FragmentsLab/app/build/intermediates/res/resources-debug.ap_/res/layout/feed.xml
+8.set=ANDROID_RESOURCE
+0.set=ANDROID_RESOURCE

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="19.1.0"
+        sha1="380a74fa689e72b85a994d930c234f4e7f8ca8ce">
+        <dex dex="/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/pre-dexed/debug/instant-run-bootstrap_2b7336ed4a878df29b9a4a45bd09aeb492627121.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="19.1.0"
+        sha1="159944e241442db2286ad3e1ffd0c5bc686dc71b">
+        <dex dex="/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/pre-dexed/debug/instant-run_4c4a2c9836221ea1643f09ccad5be953ca41833b.jar" />
+    </item>
+
+</items>

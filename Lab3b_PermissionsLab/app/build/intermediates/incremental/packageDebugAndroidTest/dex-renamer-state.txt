@@ -1,0 +1,4 @@
+#Thu Jan 19 13:24:40 PST 2017
+base.0=/Users/hyan/AndroidStudioProjects/Lab3b_PermissionsLab/app/build/intermediates/transforms/dex/androidTest/debug/folders/1000/1f/main
+renamed.0=classes.dex
+file.0=/Users/hyan/AndroidStudioProjects/Lab3b_PermissionsLab/app/build/intermediates/transforms/dex/androidTest/debug/folders/1000/1f/main/classes.dex

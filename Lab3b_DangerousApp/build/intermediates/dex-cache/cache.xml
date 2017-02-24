@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="13abb84564eee146e372d86f07cc0e432062ec6f">
+        <dex dex="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/pre-dexed/debug/instant-run_30c03c638c400de4680a01e2372df0d648870a08.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hyan/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/18.0.0/support-v4-18.0.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="44ec51e9d395a47aab135e5e1b556c0007442156">
+        <dex dex="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/pre-dexed/debug/support-v4-18.0.0_7d928b0ee204e59872afe7825dadb6f31159c2b2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.2"
+        sha1="e55375d19bffc0fa2d5dea4eb8b808539ca720aa">
+        <dex dex="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/pre-dexed/debug/instant-run-bootstrap_eeff99f676d55e9a3b849548f526c1bf05924307.jar" />
+    </item>
+
+</items>

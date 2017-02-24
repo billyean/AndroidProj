@@ -1,0 +1,7 @@
+#Tue Jan 03 23:12:45 PST 2017
+base.0=/Users/hyan/AndroidStudioProjects/Lab2_ActivityLab/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_a65244d2026745593ad45a20084fb68a1d5babde
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/Users/hyan/AndroidStudioProjects/Lab2_ActivityLab/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_71fda21f129924ffbb46f52ce67a978d785aa2f9/classes.dex
+base.1=/Users/hyan/AndroidStudioProjects/Lab2_ActivityLab/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_71fda21f129924ffbb46f52ce67a978d785aa2f9
+file.0=/Users/hyan/AndroidStudioProjects/Lab2_ActivityLab/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_a65244d2026745593ad45a20084fb68a1d5babde/classes.dex

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    abi="x86"
+    api-level="18"
+    density="xxhdpi"
+    format="8"
+    plugin-version="2.2.3"
+    timestamp="17233220765707"
+    token="1107673411982873133"
+    verifier="MANIFEST_FILE_CHANGE" >
+
+    <task
+        name="javac"
+        duration="0" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="0" />
+    <task
+        name="verifier"
+        duration="0" />
+
+    <artifact
+        location="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/outputs/apk/app-debug.apk"
+        type="MAIN" />
+
+    <build
+        timestamp="17233220765707"
+        verifier="MANIFEST_FILE_CHANGE" >
+        <artifact
+            location="/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/outputs/apk/app-debug.apk"
+            type="MAIN" />
+    </build>
+
+</instant-run>

@@ -1,0 +1,4 @@
+#Thu Jan 19 12:39:14 PST 2017
+base.0=/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+renamed.0=classes.dex
+file.0=/Users/hyan/AndroidStudioProjects/Lab3a_IntentsLabTest/lab3a_IntentsLab/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex

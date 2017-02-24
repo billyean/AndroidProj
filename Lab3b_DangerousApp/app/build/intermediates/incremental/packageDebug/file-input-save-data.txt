@@ -1,0 +1,18 @@
+#Internal package file, do not edit.
+#Thu Jan 19 13:30:30 PST 2017
+1.base=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main
+4.file=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_/AndroidManifest.xml
+1.file=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
+4.set=ANDROID_RESOURCE
+2.base=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_
+3.set=ANDROID_RESOURCE
+2.set=ANDROID_RESOURCE
+2.file=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_/resources.arsc
+count=5
+1.set=DEX
+3.base=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_
+0.set=ANDROID_RESOURCE
+0.base=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_
+3.file=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_/res/drawable-xxhdpi-v4/ic_launcher.png
+0.file=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_/res/layout/activity_main.xml
+4.base=/Users/hyan/AndroidStudioProjects/Lab3b_DangerousApp/app/build/intermediates/res/resources-debug.ap_

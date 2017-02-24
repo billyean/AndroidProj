@@ -1,0 +1,7 @@
+#Thu Jan 19 11:53:30 PST 2017
+base.0=/Users/hyan/AndroidStudioProjects/Lab3a_MyBrowser/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_af366449b9ded6ca37ed84dfa8f34f6cc79a4b68
+renamed.1=classes.dex
+renamed.0=classes2.dex
+file.1=/Users/hyan/AndroidStudioProjects/Lab3a_MyBrowser/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_06a36f7196bfc41bc34c36115f2fb54f57153474/classes.dex
+base.1=/Users/hyan/AndroidStudioProjects/Lab3a_MyBrowser/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_06a36f7196bfc41bc34c36115f2fb54f57153474
+file.0=/Users/hyan/AndroidStudioProjects/Lab3a_MyBrowser/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_af366449b9ded6ca37ed84dfa8f34f6cc79a4b68/classes.dex

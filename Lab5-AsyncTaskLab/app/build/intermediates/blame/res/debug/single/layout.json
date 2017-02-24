@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/hyan/AndroidStudioProjects/Lab5-AsyncTaskLab/app/build/intermediates/res/merged/debug/layout/activity_main.xml",
+        "source": "/Users/hyan/AndroidStudioProjects/Lab5-AsyncTaskLab/app/src/main/res/layout/activity_main.xml"
+    },
+    {
+        "merged": "/Users/hyan/AndroidStudioProjects/Lab5-AsyncTaskLab/app/build/intermediates/res/merged/debug/layout/feed.xml",
+        "source": "/Users/hyan/AndroidStudioProjects/Lab5-AsyncTaskLab/app/src/main/res/layout/feed.xml"
+    }
+]
