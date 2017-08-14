@@ -15,6 +15,7 @@ import com.haibo.mobile.android.todoapp.data.TodoRepository;
 import com.haibo.mobile.android.todoapp.model.Todo;
 import java.text.ParseException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
     private ExpandableListView listview;
 
     private List<Todo>  todos;
+
+    private HashMap<String, List<Todo>> map;
 
     private TodoRepository repository;
 
@@ -42,10 +45,11 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
         }
 
         List<String> header = TodoGroupByTime.groups;
-        HashMap<String, List<Todo>> map = TodoGroupByTime.groupTodos(todos);
+        map = TodoGroupByTime.groupTodos(todos);
         listview = (ExpandableListView) findViewById(R.id.todoExpandableListView);
         listViewAdapter = new TodoListAdapter(MainActivity.this, header, map);
         listview.setAdapter(listViewAdapter);
+        listViewAdapter.setUpdateListener(this);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,9 +87,29 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
     @Override
     public void updateTodos() {
         try {
+            // Retrieve all expanded groups
+            List<String> headers = listViewAdapter.getHeaders();
+            HashSet<String> expandsGroups = new HashSet<>();
+            for (int group = 0; group < headers.size(); group++) {
+                if (listview.isGroupExpanded(group)) {
+                    expandsGroups.add(headers.get(group));
+                }
+            }
+
             todos = repository.allNotDone();
-            listViewAdapter.updateTodos(TodoGroupByTime.groupTodos(todos));
-            listview.invalidate();
+            map = TodoGroupByTime.groupTodos(todos);
+            headers = TodoGroupByTime.groups;
+            listViewAdapter = new TodoListAdapter(MainActivity.this, headers, map);
+            headers = listViewAdapter.getHeaders();
+            listview.setAdapter(listViewAdapter);
+            listViewAdapter.setUpdateListener(this);
+            // Restore expanded groups
+            for (int group = 0; group < headers.size(); group++) {
+                String groupHeader = headers.get(group);
+                if (expandsGroups.contains(groupHeader)) {
+                    listview.expandGroup(group);
+                }
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

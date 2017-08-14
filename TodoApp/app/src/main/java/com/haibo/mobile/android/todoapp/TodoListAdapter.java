@@ -6,8 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
+import android.widget.ExpandableListView;
 import android.widget.TextView;
 
+import com.haibo.mobile.android.todoapp.data.TodoRepository;
 import com.haibo.mobile.android.todoapp.model.Todo;
 import com.haibo.mobile.android.todoapp.model.TodoGroup;
 
@@ -28,6 +30,14 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
     private HashMap<String, List<Todo>> todos;
 
+    private TodoRepository repository;
+
+    private TodoUpdateListener updateListener;
+
+    public void setUpdateListener(TodoUpdateListener updateListener) {
+        this.updateListener = updateListener;
+    }
+
     public TodoListAdapter(Context context, List<String> headers, HashMap<String, List<Todo>> todos) {
         this.context = context;
         this.todos = todos;
@@ -39,6 +49,7 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
                 this.headers.add(header);
             }
         }
+        repository = TodoRepository.getRepository(context);
     }
 
     public void updateTodos(HashMap<String, List<Todo>> todos) {
@@ -52,7 +63,6 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
             }
         }
     }
-
 
     @Override
     public int getGroupCount() {
@@ -106,7 +116,7 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        Todo todo = (Todo) getChild(groupPosition, childPosition);
+        final Todo todo = (Todo) getChild(groupPosition, childPosition);
 
         if (null == convertView) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -114,17 +124,33 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
         }
 
         CheckBox chkDone = (CheckBox) convertView.findViewById(R.id.chkDone);
-        if (todo.isDone()) {
-            chkDone.setChecked(true);
-        }
+        chkDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                repository.updateTodoDone(todo.getId());
+                updateListener.updateTodos();
+            }
+        });
+//        if (todo.isDone()) {
+//            chkDone.setChecked(true);
+//        }
 
         TextView todoTitle = (TextView) convertView.findViewById(R.id.todoTitle);
         todoTitle.setText(todo.getTodoTitle());
 
         Locale locale = Locale.getDefault();
         TextView due = (TextView) convertView.findViewById(R.id.due);
-        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
-        due.setText(df.format(todo.getDue()));
+
+        TodoGroup group = (TodoGroup) getGroup(groupPosition);
+        String groupHeader = group.getSectionHeader();
+
+        if (groupHeader.equals("Today") || groupHeader.equals("Tomorrow")) {
+            DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+            due.setText(df.format(todo.getDue()));
+        } else {
+            DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, locale);
+            due.setText(df.format(todo.getDue()));
+        }
 
         TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
         tvPriority.setText(todo.getPriority().toString());
@@ -135,4 +161,6 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
+    public List<String> getHeaders(){   return headers; }
 }

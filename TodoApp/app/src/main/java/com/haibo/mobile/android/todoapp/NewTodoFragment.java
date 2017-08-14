@@ -58,6 +58,7 @@ public class NewTodoFragment extends DialogFragment {
         etTodo = (EditText) view.findViewById(R.id.etTodoTitle);
         dpDueDate = (DatePicker) view.findViewById(R.id.dpDueDate);
         tpDueTime = (TimePicker) view.findViewById(R.id.tpDueTime);
+        tpDueTime.setIs24HourView(true);
         spPriority = (Spinner) view.findViewById(R.id.spPriority);
 
         Priority[] priorities = Priority.values();
@@ -107,6 +108,11 @@ public class NewTodoFragment extends DialogFragment {
                 NewTodoFragment.this.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

@@ -29,6 +29,10 @@ public class Todo {
         this(id, todoTitle, due, priority, false);
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getTodoTitle() {
         return todoTitle;
     }

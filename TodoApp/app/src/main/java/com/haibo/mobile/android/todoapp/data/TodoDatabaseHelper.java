@@ -21,7 +21,7 @@ public class TodoDatabaseHelper extends SQLiteOpenHelper {
 
     private Context mContext;
 
-    public static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd hhmm");
+    public static final DateFormat DATE_TIME_FORMAT = new SimpleDateFormat("yyyyMMdd HHmm");
 
     public TodoDatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
