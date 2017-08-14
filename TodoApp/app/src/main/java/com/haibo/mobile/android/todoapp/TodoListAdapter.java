@@ -1,12 +1,17 @@
 package com.haibo.mobile.android.todoapp;
 
+import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.haibo.mobile.android.todoapp.data.TodoRepository;
@@ -131,9 +136,6 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
                 updateListener.updateTodos();
             }
         });
-//        if (todo.isDone()) {
-//            chkDone.setChecked(true);
-//        }
 
         TextView todoTitle = (TextView) convertView.findViewById(R.id.todoTitle);
         todoTitle.setText(todo.getTodoTitle());
@@ -154,6 +156,21 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
         TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
         tvPriority.setText(todo.getPriority().toString());
+
+        ImageView ivUpdate = (ImageView) convertView.findViewById(R.id.update);
+        ivUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = ((FragmentActivity)context).getSupportFragmentManager();
+
+                TodoFragment newTodoFragment = (TodoFragment)manager.findFragmentByTag("fragment_update_todo");
+
+                if (null == newTodoFragment) {
+                    newTodoFragment = TodoFragment.newInstance("Update to do", todo.getId());
+                }
+                newTodoFragment.show(manager, "fragment_update_todo");
+            }
+        });
         return convertView;
     }
 

@@ -50,6 +50,20 @@ public class TodoRepository {
         return todos;
     }
 
+    public Todo todoById(int id) throws ParseException {
+        List<Todo> todos = new ArrayList<>();
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("select * from Todo where id = ?", new String[]{String.valueOf(id)});
+
+        if (cursor.moveToFirst()) {
+            String todoTitle = cursor.getString(cursor.getColumnIndex("title"));
+            Date due = DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex("due")));
+            int priority = cursor.getInt(cursor.getColumnIndex("priority"));
+            return new Todo(id, todoTitle, due, Priority.values()[priority]);
+        }
+        return null;
+    }
+
     public void insertTodo(String title, Date due, String priorityStr) {
         int priority = 0;
 
@@ -67,6 +81,25 @@ public class TodoRepository {
         SQLiteDatabase database = helper.getWritableDatabase();
         database.execSQL("insert into Todo(title, due, priority, done) values(?, ?, ?, ?)",
                 new String[]{title, DATE_TIME_FORMAT.format(due), String.valueOf(priority), "0"});
+    }
+
+    public void updateTodo(int id, String title, Date due, String priorityStr) {
+        int priority = 0;
+
+        switch (priorityStr) {
+            case "Low":
+                priority = 0;
+                break;
+            case "Medium":
+                priority = 1;
+                break;
+            case "High":
+                priority = 2;
+                break;
+        }
+        SQLiteDatabase database = helper.getWritableDatabase();
+        database.execSQL("update Todo set title = ?, due =?, priority = ? where id = ?",
+                new String[]{title, DATE_TIME_FORMAT.format(due), String.valueOf(priority), String.valueOf(id)});
     }
 
     public void updateTodoDone(int id) {

@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-import static android.widget.Toast.LENGTH_SHORT;
-
 public class MainActivity extends AppCompatActivity implements TodoUpdateListener, GestureDetector.OnGestureListener {
 
     private TodoListAdapter listViewAdapter;
@@ -62,13 +60,12 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newTodo:
-                //Toast.makeText(this, "Add to do", LENGTH_SHORT).show();
                 FragmentManager manager = getSupportFragmentManager();
 
-                NewTodoFragment newTodoFragment = (NewTodoFragment)manager.findFragmentByTag("fragment_new_todo");
+                TodoFragment newTodoFragment = (TodoFragment)manager.findFragmentByTag("fragment_new_todo");
 
                 if (null == newTodoFragment) {
-                    newTodoFragment = NewTodoFragment.newInstance("Create a new to do");
+                    newTodoFragment = TodoFragment.newInstance("Create a new to do");
                 }
                 newTodoFragment.show(manager, "fragment_new_todo");
                 return true;

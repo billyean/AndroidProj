@@ -18,13 +18,16 @@ import android.widget.TimePicker;
 
 import com.haibo.mobile.android.todoapp.data.TodoRepository;
 import com.haibo.mobile.android.todoapp.model.Priority;
+import com.haibo.mobile.android.todoapp.model.Todo;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.haibo.mobile.android.todoapp.data.TodoDatabaseHelper.DATE_TIME_FORMAT;
 
-public class NewTodoFragment extends DialogFragment {
+public class TodoFragment extends DialogFragment {
     private EditText etTodo;
 
     private DatePicker dpDueDate;
@@ -41,7 +44,7 @@ public class NewTodoFragment extends DialogFragment {
 
     private CharSequence selectedPriority;
 
-    public NewTodoFragment(){
+    public TodoFragment(){
         repository = TodoRepository.getRepository(this.getContext());
     }
 
@@ -66,7 +69,9 @@ public class NewTodoFragment extends DialogFragment {
         for (int i = 0; i < priorities.length; i++) {
             prioritiesString[i] = priorities[i].toString();
         }
-        final ArrayAdapter<CharSequence> spPriorityAdapter = ArrayAdapter.createFromResource(this.getContext(), R.array.priority_array, android.R.layout.simple_spinner_item);
+        final ArrayAdapter<CharSequence> spPriorityAdapter
+                = ArrayAdapter.createFromResource(this.getContext(), R.array.priority_array,
+                        android.R.layout.simple_spinner_item);
         spPriorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spPriority.setAdapter(spPriorityAdapter);
         spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -81,6 +86,32 @@ public class NewTodoFragment extends DialogFragment {
             }
         });
 
+
+        final int id = getArguments().getInt("id", -1);
+
+        if (id > 0) {
+            try {
+                Todo todo = repository.todoById(id);
+                etTodo.setText(todo.getTodoTitle());
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(todo.getDue());
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                int minute = calendar.get(Calendar.MINUTE);
+
+                dpDueDate.updateDate(year, month, day);
+                tpDueTime.setCurrentHour(hour);
+                tpDueTime.setCurrentMinute(minute);
+
+                spPriority.setSelection(todo.getPriority().ordinal());
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
         btnSave = (Button) view.findViewById(R.id.btnSave);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -91,13 +122,18 @@ public class NewTodoFragment extends DialogFragment {
                 String dueTime= String.format("%02d%02d", tpDueTime.getCurrentHour(), tpDueTime.getCurrentMinute());
                 try {
                     Date due = DATE_TIME_FORMAT.parse(dueDate + " " + dueTime);
-                    repository.insertTodo(todoTitle, due, selectedPriority.toString());
+
+                    if (id < 0) {
+                        repository.insertTodo(todoTitle, due, selectedPriority.toString());
+                    } else {
+                        repository.updateTodo(id, todoTitle, due, selectedPriority.toString());
+                    }
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 TodoUpdateListener listener = (TodoUpdateListener) getActivity();
                 listener.updateTodos();
-                NewTodoFragment.this.dismiss();
+                TodoFragment.this.dismiss();
             }
         });
 
@@ -105,14 +141,14 @@ public class NewTodoFragment extends DialogFragment {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NewTodoFragment.this.dismiss();
+                TodoFragment.this.dismiss();
             }
         });
     }
 
     @Override
     public void onResume() {
-        super.onResume();
+         super.onResume();
     }
 
     @Override
@@ -120,11 +156,20 @@ public class NewTodoFragment extends DialogFragment {
         inflater.inflate(R.menu.new_todo_menu, menu);
     }
 
-    public static NewTodoFragment newInstance(String title) {
-        NewTodoFragment fragment = new NewTodoFragment();
+    public static TodoFragment newInstance(String title) {
+        TodoFragment fragment = new TodoFragment();
         Bundle bundle = new Bundle();
         bundle.putString("title", title);
         fragment.setArguments(bundle);
+        return fragment;
+    }
+
+    public static TodoFragment newInstance(String title, int todoId) {
+        TodoFragment fragment = new TodoFragment();
+        Bundle args = new Bundle();
+        args.putString("title", title);
+        args.putInt("id", todoId);
+        fragment.setArguments(args);
         return fragment;
     }
 }
