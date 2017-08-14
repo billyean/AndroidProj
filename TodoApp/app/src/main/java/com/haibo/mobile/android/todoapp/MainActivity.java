@@ -1,28 +1,25 @@
 package com.haibo.mobile.android.todoapp;
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.haibo.mobile.android.todoapp.model.Priority;
+import com.haibo.mobile.android.todoapp.data.TodoRepository;
 import com.haibo.mobile.android.todoapp.model.Todo;
-
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TodoUpdateListener, GestureDetector.OnGestureListener {
 
     private TodoListAdapter listViewAdapter;
 
@@ -30,12 +27,19 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Todo>  todos;
 
+    private TodoRepository repository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        readData();
+        repository = TodoRepository.getRepository(getBaseContext());
+        try {
+            readData();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<String> header = TodoGroupByTime.groups;
         HashMap<String, List<Todo>> map = TodoGroupByTime.groupTodos(todos);
@@ -72,19 +76,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void readData() {
-        todos = new ArrayList<>();
-        DateFormat df = new SimpleDateFormat("yyyyMMdd hhmm");
+    private void readData() throws ParseException {
+        todos = repository.allNotDone();
+    }
 
-
+    @Override
+    public void updateTodos() {
         try {
-            todos.add(new Todo("Test2", df.parse("20170813 1100"), Priority.High));
-            todos.add(new Todo("Test1", df.parse("20170814 2300"), Priority.High));
-            todos.add(new Todo("Test3", df.parse("20170814 2315"), Priority.High));
-            todos.add(new Todo("Test4", df.parse("20170815 1200"), Priority.High));
+            todos = repository.allNotDone();
+            listViewAdapter.updateTodos(TodoGroupByTime.groupTodos(todos));
+            listview.invalidate();
         } catch (ParseException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean onDown(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Toast.makeText(getBaseContext(), "Swipe", Toast.LENGTH_LONG).show();
+        return false;
     }
 }
 

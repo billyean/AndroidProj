@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">TodoApp</string>
     <string name="action_add">New Todo</string>
+    <string-array name="priority_array">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>

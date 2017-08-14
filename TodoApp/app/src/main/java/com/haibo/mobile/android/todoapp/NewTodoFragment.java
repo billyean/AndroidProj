@@ -8,11 +8,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+
+import com.haibo.mobile.android.todoapp.data.TodoRepository;
+import com.haibo.mobile.android.todoapp.model.Priority;
+
+import java.text.ParseException;
+import java.util.Date;
+
+import static com.haibo.mobile.android.todoapp.data.TodoDatabaseHelper.DATE_TIME_FORMAT;
 
 public class NewTodoFragment extends DialogFragment {
     private EditText etTodo;
@@ -27,7 +37,13 @@ public class NewTodoFragment extends DialogFragment {
 
     private Button btnCancel;
 
-    public NewTodoFragment(){}
+    private TodoRepository repository;
+
+    private CharSequence selectedPriority;
+
+    public NewTodoFragment(){
+        repository = TodoRepository.getRepository(this.getContext());
+    }
 
     @Nullable
     @Override
@@ -44,7 +60,46 @@ public class NewTodoFragment extends DialogFragment {
         tpDueTime = (TimePicker) view.findViewById(R.id.tpDueTime);
         spPriority = (Spinner) view.findViewById(R.id.spPriority);
 
+        Priority[] priorities = Priority.values();
+        String[] prioritiesString = new String[priorities.length];
+        for (int i = 0; i < priorities.length; i++) {
+            prioritiesString[i] = priorities[i].toString();
+        }
+        final ArrayAdapter<CharSequence> spPriorityAdapter = ArrayAdapter.createFromResource(this.getContext(), R.array.priority_array, android.R.layout.simple_spinner_item);
+        spPriorityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spPriority.setAdapter(spPriorityAdapter);
+        spPriority.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedPriority = spPriorityAdapter.getItem(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnSave = (Button) view.findViewById(R.id.btnSave);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String todoTitle = etTodo.getText().toString();
+                String dueDate = String.format("%04d%02d%02d", dpDueDate.getYear(), dpDueDate.getMonth() + 1, dpDueDate.getDayOfMonth());
+                String dueTime= String.format("%02d%02d", tpDueTime.getCurrentHour(), tpDueTime.getCurrentMinute());
+                try {
+                    Date due = DATE_TIME_FORMAT.parse(dueDate + " " + dueTime);
+                    repository.insertTodo(todoTitle, due, selectedPriority.toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                TodoUpdateListener listener = (TodoUpdateListener) getActivity();
+                listener.updateTodos();
+                NewTodoFragment.this.dismiss();
+            }
+        });
+
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override

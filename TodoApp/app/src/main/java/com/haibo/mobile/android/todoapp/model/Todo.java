@@ -7,47 +7,38 @@ import java.util.Date;
  */
 
 public class Todo {
-    private String todoTitle;
+    private final int id;
 
-    private Date due;
+    private final String todoTitle;
 
-    private Priority priority;
+    private final Date due;
+
+    private final Priority priority;
 
     private boolean done;
 
-    public Todo(String todoTitle, Date due, Priority priority, boolean done) {
+    public Todo(int id, String todoTitle, Date due, Priority priority, boolean done) {
+        this.id = id;
         this.todoTitle = todoTitle;
         this.due = due;
         this.priority = priority;
         this.done = done;
     }
 
-    public Todo(String todoTitle, Date due, Priority priority) {
-        this(todoTitle, due, priority, false);
+    public Todo(int id, String todoTitle, Date due, Priority priority) {
+        this(id, todoTitle, due, priority, false);
     }
 
     public String getTodoTitle() {
         return todoTitle;
     }
 
-    public void setTodoTitle(String todoTitle) {
-        this.todoTitle = todoTitle;
-    }
-
     public Date getDue() {
         return due;
     }
 
-    public void setDue(Date due) {
-        this.due = due;
-    }
-
     public Priority getPriority() {
         return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
     }
 
     public boolean isDone() {

@@ -41,6 +41,19 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    public void updateTodos(HashMap<String, List<Todo>> todos) {
+        this.todos = todos;
+
+        this.headers = new ArrayList<>();
+        for (String header : headers) {
+            List<Todo> todoListByHeader = todos.get(header);
+            if (todoListByHeader != null && todoListByHeader.size() > 0) {
+                this.headers.add(header);
+            }
+        }
+    }
+
+
     @Override
     public int getGroupCount() {
         return headers.size();
@@ -112,6 +125,9 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
         TextView due = (TextView) convertView.findViewById(R.id.due);
         DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
         due.setText(df.format(todo.getDue()));
+
+        TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
+        tvPriority.setText(todo.getPriority().toString());
         return convertView;
     }
 

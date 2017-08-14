@@ -11,15 +11,17 @@
         android:layout_width="40dp"
         android:layout_height="20dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" />
+        android:padding="12dp"/>
 
     <TextView
         android:id="@+id/todoTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        android:layout_alignBaseline="@id/chkDone"
+        android:layout_alignTop="@id/chkDone"
         android:layout_toRightOf="@id/chkDone"
+        android:textColor="#040404"
+        android:textSize="15dip"
         android:padding="6dp"/>
 
     <TextView
@@ -28,7 +30,9 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/chkDone"
+        android:textSize="10dip"
+        android:textColor="#10bcc9"
         android:padding="6dp"/>
 
     <TextView
@@ -38,5 +42,12 @@
         android:text="TextView"
         android:layout_below="@id/todoTitle"
         android:layout_alignLeft="@id/todoTitle"
+        android:textSize="10dip"
         android:padding="6dp"/>
+
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/remove"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>
