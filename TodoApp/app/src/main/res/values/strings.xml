@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TodoApp</string>
+    <string name="app_name">Cool Todo List</string>
     <string name="action_add">New Todo</string>
     <string-array name="priority_array">
         <item>Low</item>

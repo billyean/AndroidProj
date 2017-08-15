@@ -157,8 +157,8 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
             due.setText(df.format(todo.getDue()));
         }
 
-        TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
-        tvPriority.setText(todo.getPriority().toString());
+//        TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
+//        tvPriority.setText(todo.getPriority().toString());
 
         ImageView ivUpdate = (ImageView) convertView.findViewById(R.id.update);
         ivUpdate.setOnClickListener(new View.OnClickListener() {
@@ -180,17 +180,17 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
             case High:
                 int red = ContextCompat.getColor(context, android.R.color.holo_red_light);
                 verticalBarView.setBackgroundColor(red);
-                tvPriority.setTextColor(red);
+//                tvPriority.setTextColor(red);
                 break;
             case Medium:
                 int blue = ContextCompat.getColor(context, android.R.color.holo_blue_light);
                 verticalBarView.setBackgroundColor(blue);
-                tvPriority.setTextColor(blue);
+//                tvPriority.setTextColor(blue);
                 break;
             case Low:
                 int green = ContextCompat.getColor(context, android.R.color.holo_green_light);
                 verticalBarView.setBackgroundColor(green);
-                tvPriority.setTextColor(green);
+//                tvPriority.setTextColor(green);
                 break;
         }
         return convertView;
