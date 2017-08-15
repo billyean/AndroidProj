@@ -1,5 +1,6 @@
 package com.haibo.mobile.android.todoapp.model;
 
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -51,5 +52,23 @@ public class Todo {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public static class TodoComparator implements Comparator<Todo> {
+
+        @Override
+        public int compare(Todo o1, Todo o2) {
+            int priComp = o1.getPriority().compareTo(o2.getPriority());
+            if (priComp != 0) {
+                return -priComp;
+            }
+
+            int dueComp = o1.getDue().compareTo(o2.getDue());
+            if (dueComp != 0) {
+                return dueComp;
+            }
+
+            return new Integer(o1.getId()).compareTo(o2.getId());
+        }
     }
 }

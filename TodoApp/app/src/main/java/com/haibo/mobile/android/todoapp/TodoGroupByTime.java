@@ -7,9 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by hyan on 8/12/17.
@@ -87,6 +91,12 @@ public class TodoGroupByTime {
                 others.add(todo);
                 map.put("Others", others);
             }
+        }
+
+        for (Map.Entry<String, List<Todo>> entry : map.entrySet()) {
+            Comparator<Todo> comp = new Todo.TodoComparator();
+            List<Todo> list = entry.getValue();
+            Collections.sort(list, comp);
         }
         return map;
     }

@@ -2,8 +2,11 @@ package com.haibo.mobile.android.todoapp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -171,6 +174,25 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
                 newTodoFragment.show(manager, "fragment_update_todo");
             }
         });
+
+        View verticalBarView = (View)convertView.findViewById(R.id.verticalBar);
+        switch (todo.getPriority()) {
+            case High:
+                int red = ContextCompat.getColor(context, android.R.color.holo_red_light);
+                verticalBarView.setBackgroundColor(red);
+                tvPriority.setTextColor(red);
+                break;
+            case Medium:
+                int blue = ContextCompat.getColor(context, android.R.color.holo_blue_light);
+                verticalBarView.setBackgroundColor(blue);
+                tvPriority.setTextColor(blue);
+                break;
+            case Low:
+                int green = ContextCompat.getColor(context, android.R.color.holo_green_light);
+                verticalBarView.setBackgroundColor(green);
+                tvPriority.setTextColor(green);
+                break;
+        }
         return convertView;
     }
 
