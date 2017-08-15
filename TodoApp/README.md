@@ -26,8 +26,10 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [X] Check done with checkbox!
-* [X] Differ section for Overdue, Today, Tmorrow, This Week, This Month. Sort todo by priority and time.
-* [X] Customized time format for different section.
+* [X] Differ section for Overdue, Today, Tmorrow, This Week, This Month. Sort todo by priority first then time.
+* [X] Customized time format for different section. Auto update section when todo gets changed.
+* [X] Color the row by priority.
+
 
 ## Video Walkthrough
 
