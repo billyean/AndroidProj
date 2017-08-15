@@ -4,7 +4,7 @@
 
 Submitted by: **Tristan Yan**
 
-Time spent: **10** hours spent in total
+Time spent: **12** hours spent in total
 
 ## User Stories
 
@@ -26,8 +26,8 @@ The following **optional** features are implemented:
 The following **additional** features are implemented:
 
 * [X] Check done with checkbox!
-* [X] Differ section for Overdue, Today, Tmorrow, This Week, This Month
-* [X] Customized time format for different section
+* [X] Differ section for Overdue, Today, Tmorrow, This Week, This Month. Sort todo by priority and time.
+* [X] Customized time format for different section.
 
 ## Video Walkthrough
 
@@ -43,11 +43,11 @@ As part of your pre-work submission, please reflect on the app and answer the fo
 
 **Question 1:** "What are your reactions to the Android app development platform so far? Compare and contrast Android's approach to layouts and user interfaces in past platforms you've used."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** Android platform has been proved a mature mobile platform and easy to be used. Compare with IOS, Android platform is more verbose and need more work.
 
 **Question 2:** "Take a moment to reflect on the `ArrayAdapter` used in your pre-work. How would you describe an adapter in this context and what is its function in Android? Why do you think the adapter is important? Explain the purpose of the `convertView` in the `getView` method of the `ArrayAdapter`."
 
-**Answer:** [Enter your answer here in a paragraph or two].
+**Answer:** A adapter is a bridge between data and view. It's a controler in MVC architecture. ArrayAdapter.getView provides a way to retieve corresponding position's view. It got call every time when there is change to the underneath View.
 
 ## Notes
 
