@@ -1,25 +1,22 @@
 package com.haibo.mobile.android.todoapp;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.CheckBox;
-import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.haibo.mobile.android.todoapp.data.TodoRepository;
+import com.haibo.mobile.android.todoapp.model.OnSwipeTouchListener;
 import com.haibo.mobile.android.todoapp.model.Todo;
 import com.haibo.mobile.android.todoapp.model.TodoGroup;
+import com.haibo.mobile.android.todoapp.ui.SwipeObjectHolder;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -90,7 +87,7 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return todos.get(headers.get(groupPosition)).get(childPosition);
+        return new SwipeObjectHolder(todos.get(headers.get(groupPosition)).get(childPosition));
     }
 
     @Override
@@ -124,7 +121,7 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        final Todo todo = (Todo) getChild(groupPosition, childPosition);
+        final SwipeObjectHolder<Todo> holder = (SwipeObjectHolder) getChild(groupPosition, childPosition);
 
         if (null == convertView) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -135,13 +132,13 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
         chkDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                repository.updateTodoDone(todo.getId());
+                repository.updateTodoDone(holder.getHeldObject().getId());
                 updateListener.updateTodos();
             }
         });
 
         TextView todoTitle = (TextView) convertView.findViewById(R.id.todoTitle);
-        todoTitle.setText(todo.getTodoTitle());
+        todoTitle.setText(holder.getHeldObject().getTodoTitle());
 
         Locale locale = Locale.getDefault();
         TextView due = (TextView) convertView.findViewById(R.id.due);
@@ -151,14 +148,12 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
 
         if (groupHeader.equals("Today") || groupHeader.equals("Tomorrow")) {
             DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
-            due.setText(df.format(todo.getDue()));
+            due.setText(df.format(holder.getHeldObject().getDue()));
         } else {
             DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, locale);
-            due.setText(df.format(todo.getDue()));
+            due.setText(df.format(holder.getHeldObject().getDue()));
         }
 
-//        TextView tvPriority = (TextView) convertView.findViewById(R.id.priority);
-//        tvPriority.setText(todo.getPriority().toString());
 
         ImageView ivUpdate = (ImageView) convertView.findViewById(R.id.update);
         ivUpdate.setOnClickListener(new View.OnClickListener() {
@@ -169,30 +164,51 @@ public class TodoListAdapter extends BaseExpandableListAdapter {
                 TodoFragment newTodoFragment = (TodoFragment)manager.findFragmentByTag("fragment_update_todo");
 
                 if (null == newTodoFragment) {
-                    newTodoFragment = TodoFragment.newInstance("Update to do", todo.getId());
+                    newTodoFragment = TodoFragment.newInstance("Update to do", holder.getHeldObject().getId());
                 }
                 newTodoFragment.show(manager, "fragment_update_todo");
             }
         });
 
         View verticalBarView = (View)convertView.findViewById(R.id.verticalBar);
-        switch (todo.getPriority()) {
+        switch (holder.getHeldObject().getPriority()) {
             case High:
                 int red = ContextCompat.getColor(context, android.R.color.holo_red_light);
                 verticalBarView.setBackgroundColor(red);
-//                tvPriority.setTextColor(red);
                 break;
             case Medium:
                 int blue = ContextCompat.getColor(context, android.R.color.holo_blue_light);
                 verticalBarView.setBackgroundColor(blue);
-//                tvPriority.setTextColor(blue);
                 break;
             case Low:
                 int green = ContextCompat.getColor(context, android.R.color.holo_green_light);
                 verticalBarView.setBackgroundColor(green);
-//                tvPriority.setTextColor(green);
                 break;
         }
+
+        convertView.setOnTouchListener(new OnSwipeTouchListener(context) {
+            @Override
+            public void onSwipeDown() {
+                // Do nothing
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                // Do nothing
+            }
+
+            @Override
+            public void onSwipeUp() {
+                // Do nothing
+            }
+
+            @Override
+            public void onSwipeRight() {
+                // Need add remove menu
+                repository.deleteTodo(holder.getHeldObject().getId());
+                updateListener.updateTodos();
+            }
+        });
         return convertView;
     }
 

@@ -1,8 +1,11 @@
 package com.haibo.mobile.android.todoapp;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 
 import com.haibo.mobile.android.todoapp.data.TodoRepository;
 import com.haibo.mobile.android.todoapp.model.Todo;
+
 import java.text.ParseException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
         listViewAdapter = new TodoListAdapter(MainActivity.this, header, map);
         listview.setAdapter(listViewAdapter);
         listViewAdapter.setUpdateListener(this);
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -141,6 +146,11 @@ public class MainActivity extends AppCompatActivity implements TodoUpdateListene
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         Toast.makeText(getBaseContext(), "Swipe", Toast.LENGTH_LONG).show();
         return false;
+    }
+
+    private int dp2px(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getApplicationContext().getResources()
+                .getDisplayMetrics());
     }
 }
 
