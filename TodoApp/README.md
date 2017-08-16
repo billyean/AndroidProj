@@ -29,6 +29,7 @@ The following **additional** features are implemented:
 * [X] Differ section for Overdue, Today, Tmorrow, This Week, This Month. Sort todo by priority first then time.
 * [X] Customized time format for different section. Auto update section when todo gets changed.
 * [X] Color the row by priority.
+* [X] Add notification whenever there is undone todo is going to be expired within 15 minutes.
 
 
 ## Video Walkthrough

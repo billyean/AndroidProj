@@ -1,5 +1,6 @@
 package com.haibo.mobile.android.todoapp.model;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import java.util.Date;
  * Created by hyan on 8/12/17.
  */
 
-public class Todo {
+public class Todo implements Serializable {
     private final int id;
 
     private final String todoTitle;

@@ -16,7 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TodoFragment"></activity>
+        <!-- <activity android:name=".TodoFragment" /> -->
+
+        <service
+            android:name=".TodoAlertService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <receiver
+            android:name=".TodoAlarmReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>

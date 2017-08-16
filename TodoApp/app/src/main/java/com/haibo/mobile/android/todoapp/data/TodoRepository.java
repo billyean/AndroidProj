@@ -9,10 +9,12 @@ import com.haibo.mobile.android.todoapp.model.Todo;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import static com.haibo.mobile.android.todoapp.data.TodoDatabaseHelper.DATE_TIME_FORMAT;
+import static java.util.Calendar.MINUTE;
 
 /**
  * Created by hyan on 8/14/17.
@@ -113,5 +115,26 @@ public class TodoRepository {
         SQLiteDatabase database = helper.getWritableDatabase();
         database.execSQL("delete from Todo where id = ?",
                 new String[]{String.valueOf(id)});
+    }
+
+    public List<Todo> toExpired(int expireMinute) throws ParseException{
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(MINUTE, expireMinute);
+
+        Calendar calendarNow = Calendar.getInstance();
+        List<Todo> todos = new ArrayList<>();
+        SQLiteDatabase database = helper.getReadableDatabase();
+        Cursor cursor = database.rawQuery("select * from Todo where done = 0 and due > ? and due < ? order by due desc",
+                new String[]{DATE_TIME_FORMAT.format(calendarNow.getTime()), DATE_TIME_FORMAT.format(calendar.getTime())});
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndex("id"));
+            String todoTitle = cursor.getString(cursor.getColumnIndex("title"));
+            Date due = DATE_TIME_FORMAT.parse(cursor.getString(cursor.getColumnIndex("due")));
+            int priority = cursor.getInt(cursor.getColumnIndex("priority"));
+            Todo todo = new Todo(id, todoTitle, due, Priority.values()[priority]);
+            todos.add(todo);
+        }
+        return todos;
     }
 }

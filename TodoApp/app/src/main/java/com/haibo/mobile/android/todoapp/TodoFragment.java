@@ -61,7 +61,7 @@ public class TodoFragment extends DialogFragment {
         etTodo = (EditText) view.findViewById(R.id.etTodoTitle);
         dpDueDate = (DatePicker) view.findViewById(R.id.dpDueDate);
         tpDueTime = (TimePicker) view.findViewById(R.id.tpDueTime);
-        tpDueTime.setIs24HourView(true);
+//        tpDueTime.setIs24HourView(true);
         spPriority = (Spinner) view.findViewById(R.id.spPriority);
 
         Priority[] priorities = Priority.values();
@@ -118,8 +118,8 @@ public class TodoFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 String todoTitle = etTodo.getText().toString();
-                String dueDate = String.format("%04d%02d%02d", dpDueDate.getYear(), dpDueDate.getMonth() + 1, dpDueDate.getDayOfMonth());
-                String dueTime= String.format("%02d%02d", tpDueTime.getCurrentHour(), tpDueTime.getCurrentMinute());
+                String dueDate = String.format("%04d-%02d-%02d", dpDueDate.getYear(), dpDueDate.getMonth() + 1, dpDueDate.getDayOfMonth());
+                String dueTime= String.format("%02d:%02d", tpDueTime.getCurrentHour(), tpDueTime.getCurrentMinute());
                 try {
                     Date due = DATE_TIME_FORMAT.parse(dueDate + " " + dueTime);
 
