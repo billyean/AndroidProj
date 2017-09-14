@@ -1,1 +1,1 @@
-![alt tag](./Daily\ Selfie.gif)
+![Self Fun Application](./Daily\ Selfie.gif)
