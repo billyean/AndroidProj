@@ -1,3 +1,19 @@
+/*
+ *     Copyright [2017] [Haibo(Tristan) Yan]
+ *
+ *     Licensed under the Apache License, Version 2.0 (the "License");
+ *     you may not use this file except in compliance with the License.
+ *     You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     Unless required by applicable law or agreed to in writing, software
+ *     distributed under the License is distributed on an "AS IS" BASIS,
+ *     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *     See the License for the specific language governing permissions and
+ *     limitations under the License.
+ */
+
 package com.haibo.mobile.android.flicks.model;
 
 import org.json.JSONArray;
@@ -13,26 +29,45 @@ import java.util.List;
 public class Movie {
     private static final String MOVIE_IMAGE_URL = "https://image.tmdb.org/t/p/w342/%s";
 
+    private static final String BACKDROP_IMAGE_URL = "https://image.tmdb.org/t/p/w1280/%s";
+
     private final String posterPath;
+
+    private final String backdropPath;
 
     private final String title;
 
     private final String overview;
 
+    private final String id;
 
-    public Movie(String posterPath, String title, String overview) {
+    private final double rate;
+
+    public Movie(String id, String posterPath, String backdropPath, String title, String overview, double rate) {
+        this.id = id;
         this.posterPath = posterPath;
+        this.backdropPath = backdropPath;
         this.title = title;
         this.overview = overview;
+        this.rate = rate;
     }
 
     public Movie(JSONObject object) throws JSONException {
-        this(object.getString("poster_path"),
-                object.getString("title"), object.getString("overview"));
+        this(object.getString("id"), object.getString("poster_path"), object.getString("backdrop_path"),
+                object.getString("title"), object.getString("overview"),
+                object.getDouble("vote_average"));
+    }
+
+    public String getId() {
+        return id;
     }
 
     public String getPosterPath() {
         return String.format(MOVIE_IMAGE_URL, posterPath);
+    }
+
+    public String getBackdropPath() {
+        return String.format(BACKDROP_IMAGE_URL, backdropPath);
     }
 
     public String getTitle() {
@@ -42,6 +77,12 @@ public class Movie {
     public String getOverview() {
         return overview;
     }
+
+    public double getRate() {
+        return rate;
+    }
+
+    public boolean showBackdrop() { return rate > 5.0; }
 
     public static List<Movie> paserJsonArrayToMovies(JSONArray array) throws JSONException {
         List<Movie> movies = new ArrayList<>();
