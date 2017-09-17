@@ -31,6 +31,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class YouTubePlayerActivity extends YouTubeBaseActivity {
@@ -40,17 +42,16 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity {
     private static final String TRAILERS_API_URL
             = "https://api.themoviedb.org/3/movie/%s/trailers?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
-    YouTubePlayerView playerView;
+    @BindView(R.id.player) YouTubePlayerView playerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_you_tube_player);
+        ButterKnife.bind(this);
 
-        playerView = (YouTubePlayerView) findViewById(R.id.player);
         final String id = getIntent().getStringExtra("id");
-
-
+        final boolean backdrop = getIntent().getBooleanExtra("backdrop", false);
         final AsyncHttpClient client = new AsyncHttpClient();
 
 
@@ -68,7 +69,11 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity {
                                     public void onInitializationSuccess(YouTubePlayer.Provider provider,
                                                                         YouTubePlayer youTubePlayer, boolean b) {
                                         // do any work here to cue video, play video, etc.
-                                        youTubePlayer.cueVideo(cue);
+                                        if (backdrop) {
+                                            youTubePlayer.loadVideo(cue);
+                                        } else {
+                                            youTubePlayer.cueVideo(cue);
+                                        }
                                     }
 
                                     @Override

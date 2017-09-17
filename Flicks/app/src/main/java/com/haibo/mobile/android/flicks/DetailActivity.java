@@ -25,6 +25,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
@@ -32,33 +34,36 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
  */
 
 public class DetailActivity extends AppCompatActivity {
-    ImageView ivMovie;
+    @BindView(R.id.ivMovie) ImageView ivMovie;
 
-    ImageView ivPlay;
+    @BindView(R.id.ivPlay) ImageView ivPlay;
 
-    TextView tvTitle;
+    @BindView(R.id.tvTitle) TextView tvTitle;
 
-    TextView tvReleaseDate;
+    @BindView(R.id.tvReleaseDate) TextView tvReleaseDate;
 
-    ImageView ivRate1, ivRate2, ivRate3, ivRate4, ivRate5;
+    @BindView(R.id.ivRate1) ImageView ivRate1;
+    @BindView(R.id.ivRate2) ImageView ivRate2;
+    @BindView(R.id.ivRate3) ImageView ivRate3;
+    @BindView(R.id.ivRate4) ImageView ivRate4;
+    @BindView(R.id.ivRate5) ImageView ivRate5;
 
-    TextView tvOverview;
+    @BindView(R.id.tvOverview) TextView tvOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitiy_detail_movie);
+        ButterKnife.bind(this);
 
         final String id = getIntent().getStringExtra("id");
         String imagePath = getIntent().getStringExtra("image_path");
-        boolean isBackdrop = getIntent().getBooleanExtra("backdrop", false);
-        ivMovie = (ImageView)findViewById(R.id.ivMovie);
+        final boolean isBackdrop = getIntent().getBooleanExtra("backdrop", false);
 
         Picasso.with(this).load(imagePath)
                 .placeholder(R.drawable.default_movie)
                 .transform(new RoundedCornersTransformation(10, 10))
                 .into(ivMovie);
-        ivPlay = (ImageView)findViewById(R.id.ivPlay);
         if (!isBackdrop) {
             ivPlay.setVisibility(View.GONE);
         }
@@ -68,6 +73,7 @@ public class DetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(DetailActivity.this, YouTubePlayerActivity.class);
                 intent.putExtra("id", id);
+                intent.putExtra("backdrop", isBackdrop);
                 startActivity(intent);
             }
         });
@@ -77,23 +83,16 @@ public class DetailActivity extends AppCompatActivity {
         tvTitle.setText(title);
 
         String releaseDate = getIntent().getStringExtra("release_date");
-        tvReleaseDate = (TextView) findViewById(R.id.tvReleaseDate);
         tvReleaseDate.setText(String.format("Release Date: %s", releaseDate));
 
         double rate = getIntent().getDoubleExtra("rate", 5.0);
-        ivRate1 = (ImageView)findViewById(R.id.ivRate1);
         ivRate1.setImageResource(rate >= 1.0 ? R.drawable.full_star : R.drawable.hollow_start);
-        ivRate2 = (ImageView)findViewById(R.id.ivRate2);
         ivRate2.setImageResource(rate >= 2.0 ? R.drawable.full_star : R.drawable.hollow_start);
-        ivRate3 = (ImageView)findViewById(R.id.ivRate3);
         ivRate3.setImageResource(rate >= 3.0 ? R.drawable.full_star : R.drawable.hollow_start);
-        ivRate4 = (ImageView)findViewById(R.id.ivRate4);
         ivRate4.setImageResource(rate >= 4.0 ? R.drawable.full_star : R.drawable.hollow_start);
-        ivRate5 = (ImageView)findViewById(R.id.ivRate5);
         ivRate5.setImageResource(rate >= 5.0 ? R.drawable.full_star : R.drawable.hollow_start);
 
         String overview = getIntent().getStringExtra("overview");
-        tvOverview = (TextView)findViewById(R.id.tvOverview);
         tvOverview.setText(overview);
     }
 

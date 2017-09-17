@@ -40,6 +40,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 //import cz.msebera.android.httpclient.Header;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 //import okhttp3.Call;
 //import okhttp3.Callback;
@@ -59,14 +61,15 @@ public class MoviesActivity extends AppCompatActivity {
 
     MovieListAdapter adapter;
 
-    ListView lvView;
+    @BindView(R.id.lvMovies) ListView lvView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movies);
+        ButterKnife.bind(this);
 
-        lvView = (ListView)findViewById(R.id.lvMovies);
+//        lvView = (ListView)findViewById(R.id.lvMovies);
         movies = new ArrayList<>();
         adapter = new MovieListAdapter(this, movies);
         lvView.setAdapter(adapter);

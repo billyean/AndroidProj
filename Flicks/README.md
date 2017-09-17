@@ -2,7 +2,7 @@
 
 **Flicks** shows the latest movies currently playing in theaters. The app utilizes the Movie Database API to display images and basic information about these movies to the user.
 
-Time spent: **2** hours spent in total
+Time spent: **8** hours spent in total
 
 ## User Stories
 
@@ -10,7 +10,7 @@ The following **required** functionality is completed:
 
 * [X] User can **scroll through current movies** from the Movie Database API
 * [X] Layout is optimized with the [ViewHolder](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView#improving-performance-with-the-viewholder-pattern) pattern.
-* [ ] For each movie displayed, user can see the following details:
+* [X] For each movie displayed, user can see the following details:
   * [X] Title, Poster Image, Overview (Portrait mode)
   * [X] Title, Backdrop Image, Overview (Landscape mode)
 
@@ -25,8 +25,8 @@ The following **bonus** features are implemented:
 * [X] Allow video trailers to be played in full-screen using the YouTubePlayerView.
     * [X] Overlay a play icon for videos that can be played.
     * [X] More popular movies should start a separate activity that plays the video immediately.
-    * [ ] Less popular videos rely on the detail page should show ratings and a YouTube preview.
-* [ ] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
+    * [X] Less popular videos rely on the detail page should show ratings and a YouTube preview.
+* [X] Apply the popular [Butterknife annotation library](http://guides.codepath.com/android/Reducing-View-Boilerplate-with-Butterknife) to reduce boilerplate code.
 * [X] Apply rounded corners for the poster or background images using [Picasso transformations](https://guides.codepath.com/android/Displaying-Images-with-the-Picasso-Library#other-transformations)
 * [ ] Replaced android-async-http network client with the popular [OkHttp](http://guides.codepath.com/android/Using-OkHttp) networking libraries.
 
