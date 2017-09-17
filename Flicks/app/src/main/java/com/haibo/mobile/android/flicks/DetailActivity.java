@@ -16,6 +16,7 @@
 
 package com.haibo.mobile.android.flicks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -48,6 +49,7 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activitiy_detail_movie);
 
+        final String id = getIntent().getStringExtra("id");
         String imagePath = getIntent().getStringExtra("image_path");
         boolean isBackdrop = getIntent().getBooleanExtra("backdrop", false);
         ivMovie = (ImageView)findViewById(R.id.ivMovie);
@@ -60,6 +62,15 @@ public class DetailActivity extends AppCompatActivity {
         if (!isBackdrop) {
             ivPlay.setVisibility(View.GONE);
         }
+
+        ivMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DetailActivity.this, YouTubePlayerActivity.class);
+                intent.putExtra("id", id);
+                startActivity(intent);
+            }
+        });
 
         String title = getIntent().getStringExtra("title");
         tvTitle = (TextView) findViewById(R.id.tvTitle);

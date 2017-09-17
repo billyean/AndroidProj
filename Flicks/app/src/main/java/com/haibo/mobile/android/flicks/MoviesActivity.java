@@ -55,12 +55,6 @@ public class MoviesActivity extends AppCompatActivity {
     private static final String SAMPLE_API_URL
             = "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
-    private static final String VIDEO_API_URL
-            = "https://api.themoviedb.org/3/movie/%d/videos?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
-    private static final String TRAILERS_API_URL
-            = "https://api.themoviedb.org/3/movie/%d/trailers?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
-
     List<Movie> movies;
 
     MovieListAdapter adapter;
@@ -82,6 +76,7 @@ public class MoviesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Movie movie = movies.get(i);
                 Intent intent = new Intent(MoviesActivity.this, DetailActivity.class);
+                intent.putExtra("id", movie.getId());
                 intent.putExtra("image_path", movie.getBackdropPath());
                 intent.putExtra("backdrop", movie.showBackdrop());
                 intent.putExtra("title", movie.getTitle());
