@@ -35,6 +35,8 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 import java.util.List;
 
+import static android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+
 /**
  * Created by Haibo(Tristan) Yan on 9/15/17.
  */
@@ -61,6 +63,12 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
                 viewHolder2 = new BackdropViewHolder();
                 viewHolder2.ivBackdrop = (ImageView) view2.findViewById(R.id.ivBackdrop);
                 view2.setTag(R.layout.backdrop, viewHolder2);
+
+                if (context.getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+                    viewHolder2.tvTitle = (TextView) view2.findViewById(R.id.tvTitle);
+                    viewHolder2.tvOverview = (TextView) view2.findViewById(R.id.tvOverview);
+                }
+
                 convertView = view2;
             } else {
                 view1 = LayoutInflater.from(getContext()).inflate(R.layout.movie, null);
@@ -80,6 +88,10 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
                     viewHolder2.ivBackdrop = (ImageView) view2.findViewById(R.id.ivBackdrop);
                     view2.setTag(R.layout.backdrop, viewHolder2);
                     convertView = view2;
+                    if (context.getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+                        viewHolder2.tvTitle = (TextView) view2.findViewById(R.id.tvTitle);
+                        viewHolder2.tvOverview = (TextView) view2.findViewById(R.id.tvOverview);
+                    }
                 }
                 viewHolder2 = (BackdropViewHolder) view2.getTag(R.layout.backdrop);
             } else {
@@ -97,14 +109,17 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
             }
         }
 
+        Picasso.with(context).load(movie.showBackdrop() ? movie.getBackdropPath() : movie.getPosterPath())
+                .placeholder(R.drawable.default_movie)
+                .transform(new RoundedCornersTransformation(10, 10))
+                .into(movie.showBackdrop() ? viewHolder2.ivBackdrop : viewHolder1.ivMovie);
+
         if (movie.showBackdrop()) {
-            Picasso.with(context).load(movie.getBackdropPath())
-                    .transform(new RoundedCornersTransformation(10, 10))
-                    .into(viewHolder2.ivBackdrop);
+            if (context.getResources().getConfiguration().orientation == ORIENTATION_LANDSCAPE) {
+                viewHolder2.tvTitle.setText(movie.getTitle());
+                viewHolder2.tvOverview.setText(movie.getOverview());
+            }
         } else {
-            Picasso.with(context).load(movie.getPosterPath())
-                    .transform(new RoundedCornersTransformation(10, 10))
-                    .into(viewHolder1.ivMovie);
             viewHolder1.tvTitle.setText(movie.getTitle());
             viewHolder1.tvOverview.setText(movie.getOverview());
         }
@@ -121,5 +136,9 @@ public class MovieListAdapter extends ArrayAdapter<Movie> {
 
     static class BackdropViewHolder {
         ImageView ivBackdrop;
+
+        TextView tvTitle;
+
+        TextView tvOverview;
     }
 }

@@ -16,9 +16,12 @@
 
 package com.haibo.mobile.android.flicks;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.haibo.mobile.android.flicks.adapter.MovieListAdapter;
@@ -73,6 +76,22 @@ public class MoviesActivity extends AppCompatActivity {
         movies = new ArrayList<>();
         adapter = new MovieListAdapter(this, movies);
         lvView.setAdapter(adapter);
+
+        lvView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Movie movie = movies.get(i);
+                Intent intent = new Intent(MoviesActivity.this, DetailActivity.class);
+                intent.putExtra("image_path", movie.showBackdrop() ?
+                        movie.getBackdropPath() : movie.getPosterPath());
+                intent.putExtra("backdrop", movie.showBackdrop());
+                intent.putExtra("title", movie.getTitle());
+                intent.putExtra("release_date", movie.getReleaseDate());
+                intent.putExtra("rate", movie.getRate());
+                intent.putExtra("overview", movie.getOverview());
+                startActivity(intent);
+            }
+        });
 
 
 //        OkHttpClient client = new OkHttpClient.Builder().build();

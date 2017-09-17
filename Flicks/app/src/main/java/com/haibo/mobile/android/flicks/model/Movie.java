@@ -43,19 +43,24 @@ public class Movie {
 
     private final double rate;
 
-    public Movie(String id, String posterPath, String backdropPath, String title, String overview, double rate) {
+    private final String releaseDate;
+
+    public Movie(String id, String posterPath, String backdropPath, String title, String overview,
+                 double rate, String releaseDate) {
         this.id = id;
         this.posterPath = posterPath;
         this.backdropPath = backdropPath;
         this.title = title;
         this.overview = overview;
         this.rate = rate;
+        this.releaseDate = releaseDate;
     }
 
     public Movie(JSONObject object) throws JSONException {
-        this(object.getString("id"), object.getString("poster_path"), object.getString("backdrop_path"),
-                object.getString("title"), object.getString("overview"),
-                object.getDouble("vote_average"));
+        this(object.getString("id"), object.getString("poster_path"),
+                object.getString("backdrop_path"), object.getString("title"),
+                object.getString("overview"), object.getDouble("vote_average"),
+                object.getString("release_date"));
     }
 
     public String getId() {
@@ -83,6 +88,10 @@ public class Movie {
     }
 
     public boolean showBackdrop() { return rate > 5.0; }
+
+    public String getReleaseDate() {
+        return releaseDate;
+    }
 
     public static List<Movie> paserJsonArrayToMovies(JSONArray array) throws JSONException {
         List<Movie> movies = new ArrayList<>();
