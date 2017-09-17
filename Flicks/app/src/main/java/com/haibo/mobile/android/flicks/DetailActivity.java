@@ -80,7 +80,7 @@ public class DetailActivity extends AppCompatActivity {
         ivRate4.setImageResource(rate >= 4.0 ? R.drawable.full_star : R.drawable.hollow_start);
         ivRate5 = (ImageView)findViewById(R.id.ivRate5);
         ivRate5.setImageResource(rate >= 5.0 ? R.drawable.full_star : R.drawable.hollow_start);
-        
+
         String overview = getIntent().getStringExtra("overview");
         tvOverview = (TextView)findViewById(R.id.tvOverview);
         tvOverview.setText(overview);

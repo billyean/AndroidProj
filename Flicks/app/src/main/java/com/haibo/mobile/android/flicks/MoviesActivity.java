@@ -82,8 +82,7 @@ public class MoviesActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Movie movie = movies.get(i);
                 Intent intent = new Intent(MoviesActivity.this, DetailActivity.class);
-                intent.putExtra("image_path", movie.showBackdrop() ?
-                        movie.getBackdropPath() : movie.getPosterPath());
+                intent.putExtra("image_path", movie.getBackdropPath());
                 intent.putExtra("backdrop", movie.showBackdrop());
                 intent.putExtra("title", movie.getTitle());
                 intent.putExtra("release_date", movie.getReleaseDate());

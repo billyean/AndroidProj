@@ -14,7 +14,7 @@
   ~     limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,24 +22,36 @@
     android:background="@color/black"
     tools:context="com.haibo.mobile.android.flicks.DetailActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <RelativeLayout android:id="@+id/rlLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivMovie"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_margin="12dp"
             app:srcCompat="@mipmap/ic_launcher" />
 
+        <ImageView
+            android:id="@+id/ivPlay"
+            android:scaleType="fitXY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/play" />
+    </RelativeLayout>
+
+    <RelativeLayout android:id="@+id/rlRight"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/rlLeft">
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ivMovie"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
@@ -109,4 +121,4 @@
             tools:text="The miraculous evacuation of Allied soldiers from Belgium, Britain, Canada and France, who were cut off and surrounded by the German army from the beaches and harbor of Dunkirk, France, between May 26th and June 4th 1940, during the Battle of France in World War II." />
 
     </RelativeLayout>
-</FrameLayout>
+</RelativeLayout>
