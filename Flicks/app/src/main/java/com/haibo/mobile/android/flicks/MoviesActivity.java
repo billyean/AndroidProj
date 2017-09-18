@@ -35,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 //import okhttp3.Call;
 //import okhttp3.Callback;
 //import okhttp3.HttpUrl;
@@ -90,68 +96,64 @@ public class MoviesActivity extends AppCompatActivity {
             }
         });
 
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Request request = new Request.Builder().url(SAMPLE_API_URL).build();
 
-//        OkHttpClient client = new OkHttpClient.Builder().build();
-////        HttpUrl.Builder builder = HttpUrl.parse(SAMPLE_API_URL).newBuilder();
-////        builder.addQueryParameter("api_key", "a07e22bc18f5cb106bfe4cc1f83ad8ed");
-////        String url = builder.build().toString();
-//        Request request = new Request.Builder().url(SAMPLE_API_URL).build();
-//
-//        client.newCall(request).enqueue(new Callback() {
-//
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                if (response.isSuccessful()) {
-//                    try {
-//                        String bodyString = response.body().toString();
-//                        final JSONObject reply = new JSONObject(bodyString);
-////                        MoviesActivity.this.runOnUiThread(new Runnable() {
-////                            @Override
-////                            public void run() {
-////                                JSONArray result = null;
-////                                try {
-////                                    result = reply.getJSONArray("results");
-////                                    movies.addAll(Movie.paserJsonArrayToMovies(result));
-////                                    adapter.notifyDataSetChanged();
-////                                    Log.d("DEBUG", movies.toString());
-////                                } catch (JSONException e) {
-////                                    e.printStackTrace();
-////                                }
-////                            }
-////                        });
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        });
+        client.newCall(request).enqueue(new Callback() {
 
-
-
-
-        final AsyncHttpClient client = new AsyncHttpClient();
-
-        client.get(this, SAMPLE_API_URL, new JsonHttpResponseHandler(){
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONArray result = response.getJSONArray("results");
-                    movies.addAll(Movie.paserJsonArrayToMovies(result));
-                    adapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String bodyString = new BufferedReader(response.body().charStream()).readLine();
+                        final JSONObject reply = new JSONObject(bodyString);
+                        MoviesActivity.this.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                JSONArray result = null;
+                                try {
+                                    result = reply.getJSONArray("results");
+                                    movies.addAll(Movie.paserJsonArrayToMovies(result));
+                                    adapter.notifyDataSetChanged();
+                                    Log.d("DEBUG", movies.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
         });
+
+
+
+
+//        final AsyncHttpClient client = new AsyncHttpClient();
+//
+//        client.get(this, SAMPLE_API_URL, new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                try {
+//                    JSONArray result = response.getJSONArray("results");
+//                    movies.addAll(Movie.paserJsonArrayToMovies(result));
+//                    adapter.notifyDataSetChanged();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//            }
+//        });
     }
 }

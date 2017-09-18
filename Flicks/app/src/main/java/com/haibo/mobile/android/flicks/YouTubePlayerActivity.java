@@ -18,6 +18,7 @@ package com.haibo.mobile.android.flicks;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -31,9 +32,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class YouTubePlayerActivity extends YouTubeBaseActivity {
     private static final String VIDEO_API_URL
@@ -42,7 +51,8 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity {
     private static final String TRAILERS_API_URL
             = "https://api.themoviedb.org/3/movie/%s/trailers?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed";
 
-    @BindView(R.id.player) YouTubePlayerView playerView;
+    @BindView(R.id.player)
+    YouTubePlayerView playerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,47 +62,96 @@ public class YouTubePlayerActivity extends YouTubeBaseActivity {
 
         final String id = getIntent().getStringExtra("id");
         final boolean backdrop = getIntent().getBooleanExtra("backdrop", false);
-        final AsyncHttpClient client = new AsyncHttpClient();
 
 
-        client.get(this, String.format(TRAILERS_API_URL, id), new JsonHttpResponseHandler(){
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        Request request = new Request.Builder().url(String.format(TRAILERS_API_URL, id)).build();
+        client.newCall(request).enqueue(new Callback() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                try {
-                    JSONArray result = response.getJSONArray("youtube");
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
 
-                    if (result.length() > 0) {
-                        final String cue = ((JSONObject)result.get(0)).getString("source");
-                        playerView.initialize("AIzaSyCoSNnhvPLo6wm8teIHqu7aqYtUJOTcXvY",
-                                new YouTubePlayer.OnInitializedListener() {
-                                    @Override
-                                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
-                                                                        YouTubePlayer youTubePlayer, boolean b) {
-                                        // do any work here to cue video, play video, etc.
-                                        if (backdrop) {
-                                            youTubePlayer.loadVideo(cue);
-                                        } else {
-                                            youTubePlayer.cueVideo(cue);
-                                        }
-                                    }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        String bodyString = new BufferedReader(response.body().charStream()).readLine();
+                        JSONObject reply = new JSONObject(bodyString);
+                        JSONArray result = reply.getJSONArray("youtube");
+                        if (result.length() > 0) {
+                            final String cue = ((JSONObject) result.get(0)).getString("source");
+                            YouTubePlayerActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    playerView.initialize("AIzaSyCoSNnhvPLo6wm8teIHqu7aqYtUJOTcXvY",
+                                            new YouTubePlayer.OnInitializedListener() {
+                                                @Override
+                                                public void onInitializationSuccess(YouTubePlayer.Provider provider,
+                                                                                    YouTubePlayer youTubePlayer, boolean b) {
+                                                    // do any work here to cue video, play video, etc.
+                                                    if (backdrop) {
+                                                        youTubePlayer.loadVideo(cue);
+                                                    } else {
+                                                        youTubePlayer.cueVideo(cue);
+                                                    }
+                                                }
 
-                                    @Override
-                                    public void onInitializationFailure(YouTubePlayer.Provider provider,
-                                                                        YouTubeInitializationResult youTubeInitializationResult) {
+                                                @Override
+                                                public void onInitializationFailure(YouTubePlayer.Provider provider,
+                                                                                    YouTubeInitializationResult youTubeInitializationResult) {
 
-                                    }
-                                });
+                                                }
+                                            });
+                                }
+                            });
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
         });
+
+//        final AsyncHttpClient client = new AsyncHttpClient();
+//        client.get(this, String.format(TRAILERS_API_URL, id), new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                try {
+//                    JSONArray result = response.getJSONArray("youtube");
+//
+//                    if (result.length() > 0) {
+//                        final String cue = ((JSONObject)result.get(0)).getString("source");
+//                        playerView.initialize("AIzaSyCoSNnhvPLo6wm8teIHqu7aqYtUJOTcXvY",
+//                                new YouTubePlayer.OnInitializedListener() {
+//                                    @Override
+//                                    public void onInitializationSuccess(YouTubePlayer.Provider provider,
+//                                                                        YouTubePlayer youTubePlayer, boolean b) {
+//                                        // do any work here to cue video, play video, etc.
+//                                        if (backdrop) {
+//                                            youTubePlayer.loadVideo(cue);
+//                                        } else {
+//                                            youTubePlayer.cueVideo(cue);
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onInitializationFailure(YouTubePlayer.Provider provider,
+//                                                                        YouTubeInitializationResult youTubeInitializationResult) {
+//
+//                                    }
+//                                });
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
+//            }
+//        });
 
 
     }
