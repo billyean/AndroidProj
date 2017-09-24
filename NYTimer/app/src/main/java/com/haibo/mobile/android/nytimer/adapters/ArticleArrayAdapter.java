@@ -43,8 +43,8 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         imageView.setImageResource(0);
 
         if (!article.getThumbnail().isEmpty()) {
-            imageView.getLayoutParams().width = 300;
-            imageView.getLayoutParams().height = 300;
+            imageView.getLayoutParams().width = 200;
+            imageView.getLayoutParams().height = 200;
             Picasso.with(getContext()).load(article.getThumbnail()).into(imageView);
         }
 

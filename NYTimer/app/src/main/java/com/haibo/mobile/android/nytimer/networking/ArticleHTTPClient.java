@@ -1,5 +1,8 @@
 package com.haibo.mobile.android.nytimer.networking;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -18,7 +21,10 @@ public class ArticleHTTPClient {
 
     private AsyncHttpClient client;
 
-    public ArticleHTTPClient() {
+    private Context context;
+
+    public ArticleHTTPClient(Context context) {
+        this.context = context;
         this.client = new AsyncHttpClient();
         client.setTimeout(20 * 1000);
     }
@@ -32,9 +38,40 @@ public class ArticleHTTPClient {
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
         params.put("page", 0);
-        if (query != null && query.length() > 0) {
-            params.put("q", query);
+        params.put("q", query);
+        SharedPreferences pref = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+
+        if (pref != null) {
+            String beginDate = pref.getString("beginDate", "");
+            if (!beginDate.isEmpty()) {
+                params.put("begin_date", beginDate);
+            }
+            String sortOrder = pref.getString("sortOrder", "");
+            if (!sortOrder.isEmpty()) {
+                params.put("sort", sortOrder);
+            }
+
+            boolean arts = pref.getBoolean("arts", false);
+            boolean fashionStyle = pref.getBoolean("fashionStyle", false);
+            boolean sports = pref.getBoolean("sports", false);
+            if (arts || fashionStyle || sports) {
+                StringBuilder newsDeskBuilder = new StringBuilder("news_desk:(");
+                if (arts) {
+                    newsDeskBuilder.append(" \"Arts\"");
+                }
+
+                if (fashionStyle) {
+                    newsDeskBuilder.append(" \"Fashion & Style\"");
+                }
+
+                if (sports) {
+                    newsDeskBuilder.append(" \"Sports\"");
+                }
+                newsDeskBuilder.append(")");
+                params.put("fq", newsDeskBuilder.toString());
+            }
         }
+
         client.get(API_BASE_URL, params, handler);
     }
 }

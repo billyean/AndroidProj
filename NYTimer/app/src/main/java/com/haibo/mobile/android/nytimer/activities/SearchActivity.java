@@ -21,6 +21,7 @@ import android.widget.ProgressBar;
 import com.haibo.mobile.android.nytimer.R;
 import com.haibo.mobile.android.nytimer.SettingFragment;
 import com.haibo.mobile.android.nytimer.adapters.ArticleArrayAdapter;
+import com.haibo.mobile.android.nytimer.listeners.SearchUpdateListener;
 import com.haibo.mobile.android.nytimer.models.Article;
 import com.haibo.mobile.android.nytimer.networking.ArticleHTTPClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -34,7 +35,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchUpdateListener {
     // Instance of network client
     private ArticleHTTPClient client;
 
@@ -50,7 +51,11 @@ public class SearchActivity extends AppCompatActivity {
     // Instance of setting
     MenuItem settingItem;
 
+    // Search result;
     List<Article> articles;
+
+    // Query string
+    private String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +93,8 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                SearchActivity.this.query = query;
+
                 // perform query here
                 fetchArticles(query);
 
@@ -115,7 +122,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void fetchArticles(String query) {
-        client = new ArticleHTTPClient();
+        client = new ArticleHTTPClient(this);
         showProgressBar();
 
         client.getArticles(query, new JsonHttpResponseHandler(){
@@ -154,6 +161,10 @@ public class SearchActivity extends AppCompatActivity {
             case R.id.action_settings:
                 FragmentManager manager = getSupportFragmentManager();
                 SettingFragment fragment = (SettingFragment)manager.findFragmentByTag("fragment_setting");
+                if (null == fragment) {
+                    fragment = SettingFragment.newInstance();
+                }
+                fragment.show(manager, "fragment_setting");
                 return true;
         }
 
@@ -169,5 +180,11 @@ public class SearchActivity extends AppCompatActivity {
     public void hideProgressBar() {
         // Hide progress item
         miActionProgressItem.setVisible(false);
+    }
+
+    @Override
+    public void updateSearchResult() {
+        // perform query here
+        fetchArticles(query);
     }
 }

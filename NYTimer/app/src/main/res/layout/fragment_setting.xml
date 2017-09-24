@@ -11,7 +11,8 @@
         android:text="Begin Date"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="2dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorSetting"/>
 
     <EditText
         android:id="@+id/etBeginDate"
@@ -31,7 +32,8 @@
         android:layout_below="@+id/etBeginDate"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorSetting"/>
 
     <Spinner
         android:id="@+id/sSortOrder"
@@ -51,9 +53,11 @@
         android:layout_below="@+id/sSortOrder"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/colorSetting"/>
 
     <LinearLayout
+        android:id="@+id/llNewDeskValues"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -79,9 +83,18 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/cbFashionStyle"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/cb_sports" />
     </LinearLayout>
 
-
+    <Button
+        android:id="@+id/btSave"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSetting"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@+id/llNewDeskValues"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Save" />
 </RelativeLayout>

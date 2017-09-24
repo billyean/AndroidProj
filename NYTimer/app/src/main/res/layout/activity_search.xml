@@ -12,6 +12,8 @@
         <GridView android:id="@+id/gvArticles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:horizontalSpacing="16dp"
+            android:verticalSpacing="16dp"
             android:numColumns="2"/>
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>
