@@ -23,8 +23,6 @@ public class Article {
 
     private String headline;
 
-    private String printHeadline;
-
     public String getSnippet() {
         return snippet;
     }
@@ -45,10 +43,6 @@ public class Article {
         return headline;
     }
 
-    public String getPrintHeadline() {
-        return printHeadline;
-    }
-
     public static Article fromJson(JSONObject jsonObject) throws JSONException {
         Article article = new Article();
         article.id = jsonObject.getString("_id");
@@ -56,7 +50,6 @@ public class Article {
         article.webURL = jsonObject.getString("web_url");
         JSONObject headline = jsonObject.getJSONObject("headline");
         article.headline = headline.getString("main");
-        article.printHeadline = headline.getString("print_headline");
         JSONArray multimedia = jsonObject.getJSONArray("multimedia");
         if (multimedia.length() > 0) {
             article.thumbnail = NY_WEB_URL + multimedia.getJSONObject(0).getString("url");

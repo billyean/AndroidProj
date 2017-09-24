@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.haibo.mobile.android.nytimer.R;
+import com.haibo.mobile.android.nytimer.activities.SearchActivity;
 import com.haibo.mobile.android.nytimer.models.Article;
 import com.squareup.picasso.Picasso;
 
@@ -52,6 +53,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         TextView tvSnippet = (TextView)convertView.findViewById(R.id.tvSnippet);
         tvSnippet.setText(article.getSnippet());
+
         return convertView;
     }
 }

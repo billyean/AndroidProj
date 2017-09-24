@@ -1,22 +1,25 @@
-package com.haibo.mobile.android.nytimer;
+package com.haibo.mobile.android.nytimer.activities;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 
+import com.haibo.mobile.android.nytimer.R;
+import com.haibo.mobile.android.nytimer.SettingFragment;
 import com.haibo.mobile.android.nytimer.adapters.ArticleArrayAdapter;
 import com.haibo.mobile.android.nytimer.models.Article;
 import com.haibo.mobile.android.nytimer.networking.ArticleHTTPClient;
@@ -31,7 +34,7 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
     // Instance of network client
     private ArticleHTTPClient client;
 
@@ -49,30 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
     List<Article> articles;
 
-    // WebView instance
-    private WebView articleWebView;
-
-
-    private class ArticleBrowser extends WebViewClient {
-        @SuppressWarnings("deprecation")
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
-        }
-
-        @TargetApi(Build.VERSION_CODES.N)
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            view.loadUrl(request.getUrl().toString());
-            return true;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
         // Set view for all content
         gvArticles = (GridView) findViewById(R.id.gvArticles);
@@ -82,16 +65,18 @@ public class MainActivity extends AppCompatActivity {
         // initialize the adapter
         articlesAdapter = new ArticleArrayAdapter(this, articles);
 
-        // attach the adapter to the RecyclerView
+        // attach the adapter to the GridView
         gvArticles.setAdapter(articlesAdapter);
 
-        articleWebView = (WebView) findViewById(R.id.webview);
-        // Configure related browser settings
-        articleWebView.getSettings().setLoadsImagesAutomatically(true);
-        articleWebView.getSettings().setJavaScriptEnabled(true);
-        articleWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        // Configure the client to use when opening URLs
-        articleWebView.setWebViewClient(new ArticleBrowser());
+        gvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(SearchActivity.this, ArticleActivity.class);
+                Article article = articles.get(i);
+                intent.putExtra("article_url", article.getWebURL());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
