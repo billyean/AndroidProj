@@ -2,6 +2,8 @@ package com.haibo.mobile.android.nytimer.networking;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -34,10 +36,10 @@ public class ArticleHTTPClient {
     }
 
     // Method for accessing the search API
-    public void getArticles(final String query, JsonHttpResponseHandler handler) {
+    public void getArticles(final String query, int page, JsonHttpResponseHandler handler) {
         RequestParams params = new RequestParams();
         params.put("api-key", API_KEY);
-        params.put("page", 0);
+        params.put("page", page);
         params.put("q", query);
         SharedPreferences pref = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
 

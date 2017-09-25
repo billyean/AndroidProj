@@ -1,26 +1,25 @@
 package com.haibo.mobile.android.nytimer.activities;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.haibo.mobile.android.nytimer.R;
-import com.haibo.mobile.android.nytimer.SettingFragment;
-import com.haibo.mobile.android.nytimer.adapters.ArticleArrayAdapter;
+import com.haibo.mobile.android.nytimer.fragments.SettingFragment;
+import com.haibo.mobile.android.nytimer.adapters.ArticleAdapter;
+import com.haibo.mobile.android.nytimer.listeners.EndlessRecyclerViewScrollListener;
 import com.haibo.mobile.android.nytimer.listeners.SearchUpdateListener;
 import com.haibo.mobile.android.nytimer.models.Article;
 import com.haibo.mobile.android.nytimer.networking.ArticleHTTPClient;
@@ -30,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,11 +42,14 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
     // Instance of the progress action-view
     MenuItem miActionProgressItem;
 
-    //
-    private GridView gvArticles;
+    // Instance of GridView
+//    private GridView gvArticles;
+    // Instance of RecyclerView
+    private RecyclerView rvArticles;
 
     // Instance of ArticleAdapter
-    private ArticleArrayAdapter articlesAdapter;
+//    private ArticleArrayAdapter articlesAdapter;
+    private ArticleAdapter articlesAdapter;
 
     // Instance of setting
     MenuItem settingItem;
@@ -57,31 +60,60 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
     // Query string
     private String query;
 
+    // Store a member variable for the listener
+//    private EndlessScrollListener scrollListener;
+    private EndlessRecyclerViewScrollListener scrollListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
         // Set view for all content
-        gvArticles = (GridView) findViewById(R.id.gvArticles);
+//        gvArticles = (GridView) findViewById(R.id.gvArticles);
+        rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
 
         articles = new ArrayList<>();
 
-        // initialize the adapter
-        articlesAdapter = new ArticleArrayAdapter(this, articles);
+//        // initialize the adapter
+//        articlesAdapter = new ArticleArrayAdapter(this, articles);
+//
+//        // attach the adapter to the GridView
+//        gvArticles.setAdapter(articlesAdapter);
+//        gvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Intent intent = new Intent(SearchActivity.this, ArticleActivity.class);
+//                Article article = articles.get(i);
+//                intent.putExtra("article_url", article.getWebURL());
+//                startActivity(intent);
+//            }
+//        });
+//
+//        scrollListener = new EndlessScrollListener() {
+//            @Override
+//            public boolean onLoadMore(int page, int totalItemsCount) {
+//                loadNextDataFromApi(page);
+//                return true;
+//            }
+//        };
+//        gvArticles.setOnScrollListener(scrollListener);
+        articlesAdapter = new ArticleAdapter(this, articles);
+        rvArticles.setAdapter(articlesAdapter);
 
-        // attach the adapter to the GridView
-        gvArticles.setAdapter(articlesAdapter);
+        StaggeredGridLayoutManager gridLayoutManager =
+                new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        rvArticles.setLayoutManager(gridLayoutManager);
 
-        gvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        scrollListener = new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(SearchActivity.this, ArticleActivity.class);
-                Article article = articles.get(i);
-                intent.putExtra("article_url", article.getWebURL());
-                startActivity(intent);
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextDataFromApi(page);
             }
-        });
+        };
+        rvArticles.addOnScrollListener(scrollListener);
     }
 
     @Override
@@ -95,8 +127,11 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
             public boolean onQueryTextSubmit(String query) {
                 SearchActivity.this.query = query;
 
+                // Need clear the result when do query again.
+                reset();
+
                 // perform query here
-                fetchArticles(query);
+                fetchArticles(query, 0);
 
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
                 // see https://code.google.com/p/android/issues/detail?id=24599
@@ -114,25 +149,27 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
         // Store instance of the menu item containing progress
         miActionProgressItem = menu.findItem(R.id.miActionProgress);
         // Extract the action-view from the menu item
-        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        ProgressBar v = (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
 
         settingItem = menu.findItem(R.id.action_settings);
 
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void fetchArticles(String query) {
+    private void fetchArticles(String query, int page) {
         client = new ArticleHTTPClient(this);
         showProgressBar();
 
-        client.getArticles(query, new JsonHttpResponseHandler(){
+        client.getArticles(query, page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 try {
                     JSONArray result = response.getJSONObject("response").getJSONArray("docs");
-                    articles.addAll(Article.fromJsonArray(result));
+                    int curSize = articles.size();
+                    List<Article> newItems = Article.fromJsonArray(result);
+                    articles.addAll(newItems);
                     hideProgressBar();
-                    articlesAdapter.notifyDataSetChanged();
+                    articlesAdapter.notifyItemRangeInserted(curSize, newItems.size());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -140,13 +177,15 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
+                hideProgressBar();
+                Toast.makeText(getBaseContext(), errorResponse.toString(), Toast.LENGTH_LONG).show();
+//                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
         });
     }
 
     private void fetchArticles() {
-        fetchArticles("");
+        fetchArticles("", 0);
     }
 
     @Override
@@ -160,7 +199,7 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
         switch (id) {
             case R.id.action_settings:
                 FragmentManager manager = getSupportFragmentManager();
-                SettingFragment fragment = (SettingFragment)manager.findFragmentByTag("fragment_setting");
+                SettingFragment fragment = (SettingFragment) manager.findFragmentByTag("fragment_setting");
                 if (null == fragment) {
                     fragment = SettingFragment.newInstance();
                 }
@@ -185,6 +224,43 @@ public class SearchActivity extends AppCompatActivity implements SearchUpdateLis
     @Override
     public void updateSearchResult() {
         // perform query here
-        fetchArticles(query);
+        reset();
+        if (query != null && !query.isEmpty()) {
+            fetchArticles(query, 0);
+        }
+    }
+
+    private void reset() {
+        // 1. First, clear the array of data
+        articles.clear();
+        // 2. Notify the adapter of the update
+        articlesAdapter.notifyDataSetChanged(); // or notifyItemRangeRemoved
+        // 3. Reset endless scroll listener when performing a new search
+        scrollListener.resetState();
+    }
+
+    public void loadNextDataFromApi(int offset) {
+        fetchArticles(query, offset);
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

@@ -1,5 +1,8 @@
 package com.haibo.mobile.android.nytimer.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,18 +13,18 @@ import java.util.List;
 /**
  * Created by Haibo(Tristan) Yan on 9/21/17.
  */
-public class Article {
+public class Article implements Parcelable {
     private static final String NY_WEB_URL = "http://www.nytimes.com/";
-
-    private String snippet;
 
     private String id;
 
+    private String headline;
+
     private String thumbnail;
 
-    private String webURL;
+    private String snippet;
 
-    private String headline;
+    private String webURL;
 
     public String getSnippet() {
         return snippet;
@@ -65,5 +68,41 @@ public class Article {
             list.add(fromJson(array.getJSONObject(index)));
         }
         return list;
+    }
+
+    public Article(){}
+
+    protected Article(Parcel in) {
+        id = in.readString();
+        headline = in.readString();
+        thumbnail = in.readString();
+        snippet = in.readString();
+        webURL = in.readString();
+    }
+
+    public static final Creator<Article> CREATOR = new Creator<Article>() {
+        @Override
+        public Article createFromParcel(Parcel in) {
+            return new Article(in);
+        }
+
+        @Override
+        public Article[] newArray(int size) {
+            return new Article[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(headline);
+        dest.writeString(thumbnail);
+        dest.writeString(snippet);
+        dest.writeString(webURL);
     }
 }

@@ -9,11 +9,19 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <GridView android:id="@+id/gvArticles"
+
+        <!--<GridView android:id="@+id/gvArticles"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:horizontalSpacing="16dp"-->
+            <!--android:verticalSpacing="16dp"-->
+            <!--android:gravity="top"-->
+            <!--android:columnWidth="150dp"-->
+            <!--android:numColumns="auto_fit"/>-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvArticles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:horizontalSpacing="16dp"
-            android:verticalSpacing="16dp"
-            android:numColumns="2"/>
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

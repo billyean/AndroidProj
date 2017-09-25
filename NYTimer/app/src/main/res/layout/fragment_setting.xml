@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/tvBeginDate"
+        android:id="@+id/tvBeginDateTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Begin Date"
@@ -14,22 +14,22 @@
         android:layout_centerHorizontal="true"
         android:textColor="@color/colorSetting"/>
 
-    <EditText
-        android:id="@+id/etBeginDate"
+    <TextView
+        android:id="@+id/tvBeginDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvBeginDate"
+        android:layout_below="@+id/tvBeginDateTitle"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:text="04/01/2016" />
+        tools:text="04/01/2016" />
 
     <TextView
         android:id="@+id/tvSortOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sort Order"
-        android:layout_below="@+id/etBeginDate"
+        android:layout_below="@+id/tvBeginDate"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="2dp"
         android:layout_centerHorizontal="true"
@@ -88,7 +88,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btSave"
+        android:id="@+id/btCancel"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:background="@color/colorSetting"
@@ -96,5 +96,16 @@
         android:layout_below="@+id/llNewDeskValues"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        android:text="Cancel" />
+
+    <Button
+        android:id="@+id/btSave"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSetting"
+        android:textColor="@color/colorWhite"
+        android:layout_below="@+id/btCancel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="4dp"
         android:text="Save" />
 </RelativeLayout>

@@ -1,21 +1,19 @@
 package com.haibo.mobile.android.nytimer.adapters;
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.haibo.mobile.android.nytimer.R;
-import com.haibo.mobile.android.nytimer.activities.SearchActivity;
 import com.haibo.mobile.android.nytimer.models.Article;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         if (null == convertView) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.item_article, parent, false);
+            convertView = inflater.inflate(R.layout.item_article_without_thumbnail, parent, false);
         }
 
         ImageView imageView = (ImageView)convertView.findViewById(R.id.ivImage);
@@ -45,7 +43,8 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
         if (!article.getThumbnail().isEmpty()) {
             imageView.getLayoutParams().width = 200;
             imageView.getLayoutParams().height = 200;
-            Picasso.with(getContext()).load(article.getThumbnail()).into(imageView);
+//            Picasso.with(getContext()).load(article.getThumbnail()).into(imageView);
+            Glide.with(getContext()).load(article.getThumbnail()).into(imageView);
         }
 
         TextView tvTitle = (TextView)convertView.findViewById(R.id.tvTitle);

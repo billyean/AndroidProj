@@ -4,8 +4,10 @@ import android.widget.AbsListView;
 
 /**
  * Created by Haibo(Tristan) Yan on 9/23/17.
+ *
+ * This was used by GridView deprecated for now
  */
-
+@Deprecated
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener {
     // The minimum number of items to have below your current scroll position
     // before loading more.
