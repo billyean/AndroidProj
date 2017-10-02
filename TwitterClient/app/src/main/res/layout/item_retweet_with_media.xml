@@ -5,7 +5,7 @@
     android:layout_width="match_parent" android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/ivRetweet"
+        android:id="@+id/ivRetweetIcon"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:layout_marginLeft="35dp"
@@ -20,15 +20,15 @@
         android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/ivRetweet"
+        android:layout_toEndOf="@+id/ivRetweetIcon"
         tools:text="SFBART Retweeted" />
 
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignEnd="@id/ivRetweet"
-        android:layout_below="@+id/ivRetweet"
+        android:layout_alignEnd="@id/ivRetweetIcon"
+        android:layout_below="@+id/ivRetweetIcon"
         app:srcCompat="@drawable/ic_launcher" />
 
     <TextView
@@ -84,8 +84,8 @@
         android:layout_alignStart="@+id/ivMedia"
         android:layout_below="@+id/ivMedia"
         android:layout_margin="10dp">
-        <ImageButton
-            android:id="@+id/ibReply"
+        <ImageView
+            android:id="@+id/ivReply"
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:srcCompat="@drawable/reply" />
@@ -94,11 +94,11 @@
             android:id="@+id/tvReplyCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/ibReply"
+            android:layout_toEndOf="@+id/ivReply"
             tools:text="1" />
 
-        <ImageButton
-            android:id="@+id/ibRetweet"
+        <ImageView
+            android:id="@+id/ivRetweet"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="60dp"
@@ -108,11 +108,11 @@
             android:id="@+id/tvRetweetCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/ibRetweet"
+            android:layout_toEndOf="@+id/ivRetweet"
             tools:text="83" />
 
-        <ImageButton
-            android:id="@+id/ibFavorite"
+        <ImageView
+            android:id="@+id/ivFavorite"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="60dp"
@@ -122,7 +122,7 @@
             android:id="@+id/tvFavoriteCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/ibFavorite"
+            android:layout_toEndOf="@id/ivFavorite"
             tools:text="43" />
     </LinearLayout>
 </RelativeLayout>

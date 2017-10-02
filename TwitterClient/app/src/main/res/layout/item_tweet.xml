@@ -60,8 +60,8 @@
         android:layout_alignStart="@+id/tvTweet"
         android:layout_below="@+id/tvTweet"
         android:layout_margin="10dp">
-        <ImageButton
-            android:id="@+id/ibReply"
+        <ImageView
+            android:id="@+id/ivReply"
             android:layout_width="24dp"
             android:layout_height="24dp"
             app:srcCompat="@drawable/reply" />
@@ -70,11 +70,11 @@
             android:id="@+id/tvReplyCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/ibReply"
+            android:layout_toEndOf="@+id/ivReply"
             tools:text="1" />
 
-        <ImageButton
-            android:id="@+id/ibRetweet"
+        <ImageView
+            android:id="@+id/ivRetweet"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="60dp"
@@ -84,11 +84,11 @@
             android:id="@+id/tvRetweetCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/ibRetweet"
+            android:layout_toEndOf="@+id/ivRetweet"
             tools:text="83" />
 
-        <ImageButton
-            android:id="@+id/ibFavorite"
+        <ImageView
+            android:id="@+id/ivFavorite"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginLeft="60dp"
@@ -98,7 +98,7 @@
             android:id="@+id/tvFavoriteCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toEndOf="@id/ibFavorite"
+            android:layout_toEndOf="@id/ivFavorite"
             tools:text="43" />
     </LinearLayout>
 </RelativeLayout>

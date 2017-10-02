@@ -2,7 +2,6 @@ package com.codepath.apps.restclienttemplate.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -56,28 +55,28 @@ public class TweetViewHolder extends RecyclerView.ViewHolder {
         this.tvTime = tvTime;
     }
 
-    public ImageButton getIbReply() {
-        return ibReply;
+    public ImageView getIvReply() {
+        return ivReply;
     }
 
-    public void setIbReply(ImageButton ibReply) {
-        this.ibReply = ibReply;
+    public void setIvReply(ImageView ivReply) {
+        this.ivReply = ivReply;
     }
 
-    public ImageButton getIbRetweet() {
-        return ibRetweet;
+    public ImageView getIvRetweet() {
+        return ivRetweet;
     }
 
-    public void setIbRetweet(ImageButton ibRetweet) {
-        this.ibRetweet = ibRetweet;
+    public void setIvRetweet(ImageView ivRetweet) {
+        this.ivRetweet = ivRetweet;
     }
 
-    public ImageButton getIbFavorite() {
-        return ibFavorite;
+    public ImageView getIvFavorite() {
+        return ivFavorite;
     }
 
-    public void setIbFavorite(ImageButton ibFavorite) {
-        this.ibFavorite = ibFavorite;
+    public void setIvFavorite(ImageView ivFavorite) {
+        this.ivFavorite = ivFavorite;
     }
 
     public TextView getTvReplyCount() {
@@ -104,25 +103,25 @@ public class TweetViewHolder extends RecyclerView.ViewHolder {
         this.tvFavoriteCount = tvFavoriteCount;
     }
 
-    private TextView tvUsername;
+    protected TextView tvUsername;
 
-    private TextView tvAT;
+    protected TextView tvAT;
 
-    private TextView tvTweet;
+    protected TextView tvTweet;
 
-    private TextView tvTime;
+    protected TextView tvTime;
 
-    private ImageButton ibReply;
+    protected ImageView ivReply;
 
-    private ImageButton ibRetweet;
+    protected ImageView ivRetweet;
 
-    private ImageButton ibFavorite;
+    protected ImageView ivFavorite;
 
-    private TextView tvReplyCount;
+    protected TextView tvReplyCount;
 
-    private TextView tvRetweetCount;
+    protected TextView tvRetweetCount;
 
-    private TextView tvFavoriteCount;
+    protected TextView tvFavoriteCount;
 
     public TweetViewHolder(View view) {
         super(view);
@@ -132,9 +131,12 @@ public class TweetViewHolder extends RecyclerView.ViewHolder {
         tvAT = (TextView)view.findViewById(R.id.tvAT);
         tvTweet = (TextView)view.findViewById(R.id.tvTweet);
         tvTime = (TextView)view.findViewById(R.id.tvTime);
-        ibReply = (ImageButton)view.findViewById(R.id.ibReply);
-        ibRetweet = (ImageButton)view.findViewById(R.id.ibRetweet);
-        ibFavorite = (ImageButton)view.findViewById(R.id.ibFavorite);
+        ivReply = (ImageView)view.findViewById(R.id.ivReply);
+        ivReply.setClickable(true);
+        ivRetweet = (ImageView)view.findViewById(R.id.ivRetweet);
+        ivRetweet.setClickable(true);
+        ivFavorite = (ImageView)view.findViewById(R.id.ivFavorite);
+        ivFavorite.setClickable(true);
         tvReplyCount = (TextView)view.findViewById(R.id.tvReplyCount);
         tvRetweetCount = (TextView)view.findViewById(R.id.tvRetweetCount);
         tvFavoriteCount = (TextView)view.findViewById(R.id.tvFavoriteCount);

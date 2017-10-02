@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,7 +19,6 @@ import com.codepath.apps.restclienttemplate.R;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
@@ -119,384 +117,22 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private void configureRetweetWithMediaViewHolder(RetweetWithMediaViewHolder holder, int position) {
-        final Tweet tweet = tweets.get(position);
-        final RetweetWithMediaViewHolder h = holder;
-        holder.getTvRetweetedBy().setText(tweet.getRetweetedUser().getName() + " Retweeted");
-        ImageView ivProfileImage = holder.getIvProfileImage();
-        Picasso.with(activity).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
-
-        holder.getTvUsername().setText(tweet.getUser().getName());
-        holder.getTvAT().setText("@" + tweet.getUser().getScreenName());
-        holder.getTvTweet().setText(tweet.getBody());
-
-        holder.getTvTime().setText(tweet.getTimeBefore());
+        configureRetweetViewHolder(holder, position);
+        Tweet tweet = tweets.get(position);
         Picasso.with(activity).load(tweet.getMediaURL()).into(holder.getIvMedia());
-        if (tweet.isRetweeted()) {
-            holder.getIbRetweet().setImageResource(R.drawable.retweeted);
-        } else {
-            holder.getIbRetweet().setImageResource(R.drawable.retweet);
-        }
 
-        if (tweet.isFavorited()) {
-            holder.getIbFavorite().setImageResource(R.drawable.favorited);
-        } else {
-            holder.getIbFavorite().setImageResource(R.drawable.favorite);
-        }
-
-        if (0 != tweet.getRetweetCount())
-            holder.getTvRetweetCount().setText(String.valueOf(tweet.getRetweetCount()));
-
-        if (0 != tweet.getFavoriteCount())
-            holder.getTvFavoriteCount().setText(String.valueOf(tweet.getFavoriteCount()));
-
-        holder.getIbReply().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ComposeTweetActivity.class);
-                intent.putExtra("replyToUser", Parcels.wrap(tweet.getUser()));
-                activity.startActivityForResult(intent, RETWEET_REQUEST_CODE);
-            }
-        });
-
-        holder.getIbRetweet().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isRetweeted()) {
-                    client.unRetweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                TextView retweetCount = h.getTvRetweetCount();
-                                tweet.setRetweetCount(tweet.getRetweetCount() - 1);
-                                tweet.setRetweeted(false);
-                                Tweet newRetweet = Tweet.fromJSON(response);
-                                tweet.setUid(newRetweet.getUid());
-                                retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                                h.getIbRetweet().setImageResource(R.drawable.retweet);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.retweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView retweetCount = h.getTvRetweetCount();
-                            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                            tweet.setRetweeted(true);
-                            retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                            h.getIbRetweet().setImageResource(R.drawable.retweeted);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        holder.getIbFavorite().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isFavorited()) {
-                    client.unFavorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorite);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.favorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
-                            tweet.setFavorited(true);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorited);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
     }
 
     private void configureRetweetViewHolder(RetweetViewHolder holder, int position) {
-        final Tweet tweet = tweets.get(position);
-        final RetweetViewHolder h = holder;
+        configureTweetViewHolder(holder, position);
+        Tweet tweet = tweets.get(position);
         holder.getTvRetweetedBy().setText(tweet.getRetweetedUser().getName() + " Retweeted");
-        ImageView ivProfileImage = holder.getIvProfileImage();
-        Picasso.with(activity).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
-
-        holder.getTvUsername().setText(tweet.getUser().getName());
-        holder.getTvAT().setText("@" + tweet.getUser().getScreenName());
-        holder.getTvTweet().setText(tweet.getBody());
-
-        holder.getTvTime().setText(tweet.getTimeBefore());
-        if (tweet.isRetweeted()) {
-            holder.getIbRetweet().setImageResource(R.drawable.retweeted);
-        } else {
-            holder.getIbRetweet().setImageResource(R.drawable.retweet);
-        }
-
-        if (tweet.isFavorited()) {
-            holder.getIbFavorite().setImageResource(R.drawable.favorited);
-        } else {
-            holder.getIbFavorite().setImageResource(R.drawable.favorite);
-        }
-
-        if (0 != tweet.getRetweetCount())
-            holder.getTvRetweetCount().setText(String.valueOf(tweet.getRetweetCount()));
-
-        if (0 != tweet.getFavoriteCount())
-            holder.getTvFavoriteCount().setText(String.valueOf(tweet.getFavoriteCount()));
-
-        holder.getIbReply().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ComposeTweetActivity.class);
-                intent.putExtra("replyToUser", Parcels.wrap(tweet.getUser()));
-                activity.startActivityForResult(intent, RETWEET_REQUEST_CODE);
-            }
-        });
-
-        holder.getIbRetweet().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isRetweeted()) {
-                    client.unRetweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                TextView retweetCount = h.getTvRetweetCount();
-                                tweet.setRetweetCount(tweet.getRetweetCount() - 1);
-                                tweet.setRetweeted(false);
-                                Tweet newRetweet = Tweet.fromJSON(response);
-                                tweet.setUid(newRetweet.getUid());
-                                retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                                h.getIbRetweet().setImageResource(R.drawable.retweet);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.retweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView retweetCount = h.getTvRetweetCount();
-                            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                            tweet.setRetweeted(true);
-                            retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                            h.getIbRetweet().setImageResource(R.drawable.retweeted);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        holder.getIbFavorite().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isFavorited()) {
-                    client.unFavorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorite);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.favorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
-                            tweet.setFavorited(true);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorited);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
     }
 
     private void configureTweetWithMediaViewHolder(TweetWithMediaViewHolder holder, int position) {
-        final Tweet tweet = tweets.get(position);
-        final TweetWithMediaViewHolder h = holder;
-        ImageView ivProfileImage = holder.getIvProfileImage();
-        Picasso.with(activity).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
-
-        holder.getTvUsername().setText(tweet.getUser().getName());
-        holder.getTvAT().setText("@" + tweet.getUser().getScreenName());
-        holder.getTvTweet().setText(tweet.getBody());
-
-        holder.getTvTime().setText(tweet.getTimeBefore());
+        configureTweetViewHolder(holder, position);
+        Tweet tweet = tweets.get(position);
         Picasso.with(activity).load(tweet.getMediaURL()).into(holder.getIvMedia());
-        if (tweet.isRetweeted()) {
-            holder.getIbRetweet().setImageResource(R.drawable.retweeted);
-        } else {
-            holder.getIbRetweet().setImageResource(R.drawable.retweet);
-        }
-
-        if (tweet.isFavorited()) {
-            holder.getIbFavorite().setImageResource(R.drawable.favorited);
-        } else {
-            holder.getIbFavorite().setImageResource(R.drawable.favorite);
-        }
-        if (0 != tweet.getRetweetCount())
-            holder.getTvRetweetCount().setText(String.valueOf(tweet.getRetweetCount()));
-
-        if (0 != tweet.getFavoriteCount())
-            holder.getTvFavoriteCount().setText(String.valueOf(tweet.getFavoriteCount()));
-
-        holder.getIbReply().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(activity, ComposeTweetActivity.class);
-                intent.putExtra("replyToUser", Parcels.wrap(tweet.getUser()));
-                activity.startActivityForResult(intent, RETWEET_REQUEST_CODE);
-            }
-        });
-
-        holder.getIbRetweet().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isRetweeted()) {
-                    client.unRetweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            try {
-                                TextView retweetCount = h.getTvRetweetCount();
-                                tweet.setRetweetCount(tweet.getRetweetCount() - 1);
-                                tweet.setRetweeted(false);
-                                Tweet newRetweet = Tweet.fromJSON(response);
-                                tweet.setUid(newRetweet.getUid());
-                                retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                                h.getIbRetweet().setImageResource(R.drawable.retweet);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.retweet(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView retweetCount = h.getTvRetweetCount();
-                            tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                            tweet.setRetweeted(true);
-                            retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                            h.getIbRetweet().setImageResource(R.drawable.retweeted);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        holder.getIbFavorite().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TwitterClient client = TwitterApplication.getRestClient();
-
-                if (tweet.isFavorited()) {
-                    client.unFavorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorite);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                } else {
-                    client.favorite(tweet, new JsonHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                            TextView favoriteCount = h.getTvFavoriteCount();
-                            tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
-                            tweet.setFavorited(true);
-                            favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorited);
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                            Toast.makeText(activity, errorResponse.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
     }
 
     private void configureTweetViewHolder(TweetViewHolder holder, int position) {
@@ -511,15 +147,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         holder.getTvTime().setText(tweet.getTimeBefore());
         if (tweet.isRetweeted()) {
-            holder.getIbRetweet().setImageResource(R.drawable.retweeted);
+            holder.getIvRetweet().setImageResource(R.drawable.retweeted);
         } else {
-            holder.getIbRetweet().setImageResource(R.drawable.retweet);
+            holder.getIvRetweet().setImageResource(R.drawable.retweet);
         }
 
         if (tweet.isFavorited()) {
-            holder.getIbFavorite().setImageResource(R.drawable.favorited);
+            holder.getIvFavorite().setImageResource(R.drawable.favorited);
         } else {
-            holder.getIbFavorite().setImageResource(R.drawable.favorite);
+            holder.getIvFavorite().setImageResource(R.drawable.favorite);
         }
 
         if (0 != tweet.getRetweetCount())
@@ -528,7 +164,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if (0 != tweet.getFavoriteCount())
             holder.getTvFavoriteCount().setText(String.valueOf(tweet.getFavoriteCount()));
 
-        holder.getIbReply().setOnClickListener(new View.OnClickListener() {
+        holder.getIvReply().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(activity, ComposeTweetActivity.class);
@@ -537,7 +173,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         });
 
-        holder.getIbRetweet().setOnClickListener(new View.OnClickListener() {
+        holder.getIvRetweet().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TwitterClient client = TwitterApplication.getRestClient();
@@ -553,7 +189,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tweet.setRetweetCount(tweet.getRetweetCount() - 1);
                             tweet.setRetweeted(false);
                             retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-                            h.getIbRetweet().setImageResource(R.drawable.retweet);
+                            h.getIvRetweet().setImageResource(R.drawable.retweet);
                         }
 
                         @Override
@@ -574,8 +210,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                 tweet.setUid(newRetweet.getUid());
                                 tweet.setRetweeted(true);
                                 retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
-//                                Picasso.with(activity).load(R.drawable.retweeted).into(h.getIbRetweet());
-                                h.getIbRetweet().setImageResource(R.drawable.retweeted);
+                                h.getIvRetweet().setImageResource(R.drawable.retweeted);
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -591,7 +226,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
         });
 
-        holder.getIbFavorite().setOnClickListener(new View.OnClickListener() {
+        holder.getIvFavorite().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TwitterClient client = TwitterApplication.getRestClient();
@@ -603,7 +238,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             TextView favoriteCount = h.getTvFavoriteCount();
                             tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
                             favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorite);
+                            h.getIvFavorite().setImageResource(R.drawable.favorite);
                         }
 
                         @Override
@@ -619,7 +254,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
                             tweet.setFavorited(true);
                             favoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                            h.getIbFavorite().setImageResource(R.drawable.favorited);
+                            h.getIvFavorite().setImageResource(R.drawable.favorited);
                         }
 
                         @Override
