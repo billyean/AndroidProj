@@ -6,4 +6,5 @@
     <string name="intent_scheme">oauth</string>
     <string name="intent_host">cprest</string>
     <string name="tweet_hint">What\'s happening?</string>
+    <string name="save_draft">You have draft message, do you want to save it?</string>
 </resources>

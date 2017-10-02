@@ -49,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvAT"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
         tools:text="9h" />
 
     <ImageView
@@ -62,9 +63,9 @@
     <LinearLayout
         android:id="@+id/rlActions"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="top"
+        android:gravity="center_vertical"
         android:layout_alignStart="@+id/ivMedia"
         android:layout_below="@+id/ivMedia"
         android:layout_margin="10dp">

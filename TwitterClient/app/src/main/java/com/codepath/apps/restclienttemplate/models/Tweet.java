@@ -49,6 +49,8 @@ public class Tweet{
 
     String mediaURL;
 
+    String videoURL;
+
     public static List<Tweet> fromJSONArray(JSONArray jsonArray) throws JSONException {
         List<Tweet> tweets = new ArrayList<>();
 
@@ -75,7 +77,15 @@ public class Tweet{
             if (jsonObject.has("entities")) {
                 JSONObject entities = jsonObject.getJSONObject("entities");
                 if (entities.has("media")) {
+                    Log.i("INFO", entities.getJSONArray("media").toString());
                     tweet.mediaURL = entities.getJSONArray("media").getJSONObject(0).getString("media_url_https");
+                }
+
+                if(entities.has("urls")) {
+                    JSONArray urls = entities.getJSONArray("urls");
+                    if (urls.length() > 0) {
+                        tweet.videoURL = urls.getJSONObject(0).getString("expanded_url");
+                    }
                 }
             }
         } else {
@@ -95,6 +105,13 @@ public class Tweet{
                 JSONObject entities = retweetdStatus.getJSONObject("entities");
                 if (entities.has("media")) {
                     tweet.mediaURL = entities.getJSONArray("media").getJSONObject(0).getString("media_url_https");
+                }
+
+                if(entities.has("urls")) {
+                    JSONArray urls = entities.getJSONArray("urls");
+                    if (urls.length() > 0) {
+                        tweet.videoURL = urls.getJSONObject(0).getString("expanded_url");
+                    }
                 }
             }
         }
@@ -164,6 +181,14 @@ public class Tweet{
 
     public void setMediaURL(String mediaURL) {
         this.mediaURL = mediaURL;
+    }
+
+    public String getVideoURL() {
+        return videoURL;
+    }
+
+    public void setVideoURL(String videoURL) {
+        this.videoURL = videoURL;
     }
 
     public int getRetweetCount() {

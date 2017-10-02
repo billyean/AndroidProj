@@ -8,8 +8,8 @@
         android:id="@+id/ivRetweetIcon"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp"
         android:layout_alignParentTop="true"
         app:srcCompat="@drawable/retweet" />
 
@@ -64,9 +64,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tvAT"
-        android:layout_marginRight="16dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginRight="16dp"
         tools:text="9h" />
+
+    <VideoView
+        android:id="@+id/vvVideo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/tvTweet"
+        android:layout_below="@+id/tvTweet"
+        tools:srcCompat="@drawable/ic_launcher" />
 
     <LinearLayout
         android:id="@+id/rlActions"
@@ -74,8 +82,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_alignStart="@+id/tvTweet"
-        android:layout_below="@+id/tvTweet"
+        android:layout_alignStart="@+id/vvVideo"
+        android:layout_below="@+id/vvVideo"
         android:layout_margin="10dp">
         <ImageView
             android:id="@+id/ivReply"

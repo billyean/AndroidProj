@@ -1,8 +1,12 @@
 package com.codepath.apps.restclienttemplate.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -77,13 +81,39 @@ public class ComposeTweetActivity extends AppCompatActivity {
         iVClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ComposeTweetActivity.this.finish();
+                AlertDialog.Builder adb = new AlertDialog.Builder(ComposeTweetActivity.this);
+                adb.setMessage(R.string.save_draft);
+                adb.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences pref =
+                                PreferenceManager.getDefaultSharedPreferences(ComposeTweetActivity.this);
+                        SharedPreferences.Editor edit = pref.edit();
+                        edit.putString("draftTweet", etTweet.getText().toString());
+                        edit.commit();
+                        finish();
+                    }
+                });
+
+                adb.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                adb.show();
             }
         });
 
         etTweet = (EditText)findViewById(R.id.etTweet);
+
+
         if (parcelable != null) {
             etTweet.setText("@" + replyToUser.getScreenName());
+        } else {
+            SharedPreferences pref =
+                    PreferenceManager.getDefaultSharedPreferences(ComposeTweetActivity.this);
+            etTweet.setText(pref.getString("draftTweet", ""));
         }
         tvWordNumber = (TextView)findViewById(R.id.tvWordNumber);
         tvWordNumber.setText(String.valueOf(etTweet.getText().length()));
@@ -132,6 +162,7 @@ public class ComposeTweetActivity extends AppCompatActivity {
                             tvScreenName.setText("@" + screenName);
                             Picasso.with(ComposeTweetActivity.this.getBaseContext())
                                     .load(profileURL)
+                                    .resize(80, 80)
                                     .transform(new RoundedCornersTransformation(10, 10))
                                     .into(ivUserPic);
                         } catch (JSONException e) {

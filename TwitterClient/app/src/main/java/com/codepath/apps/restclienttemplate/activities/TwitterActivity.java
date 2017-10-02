@@ -121,19 +121,16 @@ public class TwitterActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                Log.d("TwitterClient", errorResponse.toString());
                 throwable.printStackTrace();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d("TwitterClient", responseString);
                 throwable.printStackTrace();
             }
         }, TWEET_NUMBER_IN_PAGE, lastSinceId); // Default start first id
@@ -143,9 +140,7 @@ public class TwitterActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_tweets, menu);
-
         MenuItem newTweetItem = menu.findItem(R.id.newTweet);
-
         return true;
     }
 

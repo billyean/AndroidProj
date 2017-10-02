@@ -22,9 +22,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcels;
-
 import java.util.List;
-
 import cz.msebera.android.httpclient.Header;
 
 import static com.codepath.apps.restclienttemplate.activities.TwitterActivity.RETWEET_REQUEST_CODE;
@@ -40,8 +38,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private List<Tweet> tweets;
 
-    private final int TWEET_WITHOUT_MEDIA = 0, TWEET_WITH_MEDIA = 1, RETWEET_WITHOUT_MEDIA = 2,
-            RETWEET_WITH_MEDIA = 3;
+    private final int TWEET_WITHOUT_MEDIA = 0, TWEET_WITH_MEDIA = 1, TWEET_WITH_VIDEO = 2, RETWEET_WITHOUT_MEDIA = 3,
+            RETWEET_WITH_MEDIA = 4, RETWEET_WITH_VIDEO = 5;
 
     public  ComplexRecyclerViewAdapter(Activity activity, List<Tweet> tweets) {
         this.activity = activity;
@@ -55,13 +53,17 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if (tweet.isRetweetedBy()) {
             if (null != tweet.getMediaURL()) {
                 return RETWEET_WITH_MEDIA;
+            } else if (null != tweet.getVideoURL()){
+                return RETWEET_WITH_VIDEO;
             } else {
                 return RETWEET_WITHOUT_MEDIA;
             }
         } else {
             if (null != tweet.getMediaURL()) {
                 return TWEET_WITH_MEDIA;
-            } else {
+            } else if (null != tweet.getVideoURL()){
+                return TWEET_WITH_VIDEO;
+            }  else {
                 return TWEET_WITHOUT_MEDIA;
             }
         }
@@ -77,17 +79,25 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 View v1 = inflater.inflate(R.layout.item_retweet_with_media, parent, false);
                 viewHolder = new RetweetWithMediaViewHolder(v1);
                 break;
+            case RETWEET_WITH_VIDEO:
+                View v2 = inflater.inflate(R.layout.item_retweet_with_video, parent, false);
+                viewHolder = new RetweetWithVideoViewHolder(v2);
+                break;
             case RETWEET_WITHOUT_MEDIA:
-                View v2 = inflater.inflate(R.layout.item_retweet, parent, false);
-                viewHolder = new RetweetViewHolder(v2);
+                View v3 = inflater.inflate(R.layout.item_retweet, parent, false);
+                viewHolder = new RetweetViewHolder(v3);
                 break;
             case TWEET_WITH_MEDIA:
-                View v3 = inflater.inflate(R.layout.item_tweet_with_media, parent, false);
-                viewHolder = new TweetWithMediaViewHolder(v3);
+                View v4 = inflater.inflate(R.layout.item_tweet_with_media, parent, false);
+                viewHolder = new TweetWithMediaViewHolder(v4);
+                break;
+            case TWEET_WITH_VIDEO:
+                View v5 = inflater.inflate(R.layout.item_tweet_with_video, parent, false);
+                viewHolder = new TweetWithVideoViewHolder(v5);
                 break;
             default:
-                View v4 = inflater.inflate(R.layout.item_tweet, parent, false);
-                viewHolder = new TweetViewHolder(v4);
+                View v6 = inflater.inflate(R.layout.item_tweet, parent, false);
+                viewHolder = new TweetViewHolder(v6);
                 break;
         }
 
@@ -101,17 +111,25 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 RetweetWithMediaViewHolder vh1 = (RetweetWithMediaViewHolder)holder;
                 configureRetweetWithMediaViewHolder(vh1, position);
                 break;
+            case RETWEET_WITH_VIDEO:
+                RetweetWithVideoViewHolder vh2 = (RetweetWithVideoViewHolder)holder;
+                configureRetweetWithVideoViewHolder(vh2, position);
+                break;
             case RETWEET_WITHOUT_MEDIA:
-                RetweetViewHolder vh2 = (RetweetViewHolder)holder;
-                configureRetweetViewHolder(vh2, position);
+                RetweetViewHolder vh3 = (RetweetViewHolder)holder;
+                configureRetweetViewHolder(vh3, position);
                 break;
             case TWEET_WITH_MEDIA:
-                TweetWithMediaViewHolder vh3 = (TweetWithMediaViewHolder)holder;
-                configureTweetWithMediaViewHolder(vh3, position);
+                TweetWithMediaViewHolder vh4 = (TweetWithMediaViewHolder)holder;
+                configureTweetWithMediaViewHolder(vh4, position);
+                break;
+            case TWEET_WITH_VIDEO:
+                TweetWithVideoViewHolder vh5 = (TweetWithVideoViewHolder)holder;
+                configureTweetWithVideoViewHolder(vh5, position);
                 break;
             default:
-                TweetViewHolder vh4 = (TweetViewHolder)holder;
-                configureTweetViewHolder(vh4, position);
+                TweetViewHolder vh6 = (TweetViewHolder)holder;
+                configureTweetViewHolder(vh6, position);
                 break;
         }
     }
@@ -129,10 +147,30 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         holder.getTvRetweetedBy().setText(tweet.getRetweetedUser().getName() + " Retweeted");
     }
 
+    private void configureRetweetWithVideoViewHolder(RetweetWithVideoViewHolder holder, int position) {
+        try {
+            configureRetweetViewHolder(holder, position);
+            Tweet tweet = tweets.get(position);
+            holder.vvVideo.setVideoPath(tweet.getVideoURL());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void configureTweetWithMediaViewHolder(TweetWithMediaViewHolder holder, int position) {
         configureTweetViewHolder(holder, position);
         Tweet tweet = tweets.get(position);
         Picasso.with(activity).load(tweet.getMediaURL()).into(holder.getIvMedia());
+    }
+
+    private void configureTweetWithVideoViewHolder(TweetWithVideoViewHolder holder, int position) {
+        try {
+            configureTweetViewHolder(holder, position);
+            Tweet tweet = tweets.get(position);
+            holder.vvVideo.setVideoPath(tweet.getVideoURL());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void configureTweetViewHolder(TweetViewHolder holder, int position) {
@@ -179,9 +217,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 TwitterClient client = TwitterApplication.getRestClient();
 
                 if (tweet.isRetweeted()) {
-                    Log.i("INFO", "call setOnClickListener 4 - unRetweet");
-                    Log.i("INFO", "tweet id : " + tweet.getUid());
-                    Log.i("INFO", "isRetweeted : " + tweet.isRetweeted());
                     client.unRetweet(tweet, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -204,10 +239,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             try {
                                 TextView retweetCount = h.getTvRetweetCount();
                                 tweet.setRetweetCount(tweet.getRetweetCount() + 1);
-                                Log.i("INFO", "retweet id : " + tweet.getUid());
                                 Tweet newRetweet = Tweet.fromJSON(response);
-                                Log.i("INFO", "new tweet id : " + newRetweet.getUid());
-                                tweet.setUid(newRetweet.getUid());
+                                tweet.setRetweetId(newRetweet.getUid());
                                 tweet.setRetweeted(true);
                                 retweetCount.setText(String.valueOf(tweet.getRetweetCount()));
                                 h.getIvRetweet().setImageResource(R.drawable.retweeted);
