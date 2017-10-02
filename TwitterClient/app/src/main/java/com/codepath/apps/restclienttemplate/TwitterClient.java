@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
 
+import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
 import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
@@ -24,8 +25,8 @@ import com.loopj.android.http.RequestParams;
 public class TwitterClient extends OAuthBaseClient {
 	public static final BaseApi REST_API_INSTANCE = TwitterApi.instance(); // Change this
 	public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-	public static final String REST_CONSUMER_KEY = "uRWLjbvBr0CyrNCbf2QFnbVtR";       // Change this
-	public static final String REST_CONSUMER_SECRET = "DAm2XxbDfHEBdNWLDrLUkui2QeMUnT7IJYu4mIqQPka9Y56MUl"; // Change this
+	public static final String REST_CONSUMER_KEY = "rlWMPh3gz1jeoE0ArS7io8hVT";       // Change this
+	public static final String REST_CONSUMER_SECRET = "FnGTPUKj1giaamWrSvidHTTTb8ZQENjNlHgIIgegMEiLmXBRIr"; // Change this
 
 	// Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
 	public static final String FALLBACK_URL = "https://github.com/billyean/codepath";
@@ -43,11 +44,12 @@ public class TwitterClient extends OAuthBaseClient {
 	}
 	// CHANGE THIS
 	// DEFINE METHODS for different API endpoints here
-	public void getInterestingnessList(AsyncHttpResponseHandler handler) {
-		String apiUrl = getApiUrl("?nojsoncallback=1&method=flickr.interestingness.getList");
+	public void getInterestingnessList(AsyncHttpResponseHandler handler, int count, long sinceId) {
+		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		// Can specify query string params directly or through RequestParams.
 		RequestParams params = new RequestParams();
-		params.put("format", "json");
+		params.put("count", count);
+		params.put("since_id", sinceId);
 		client.get(apiUrl, params, handler);
 	}
 
@@ -59,4 +61,52 @@ public class TwitterClient extends OAuthBaseClient {
 	 *    i.e client.get(apiUrl, params, handler);
 	 *    i.e client.post(apiUrl, params, handler);
 	 */
+
+	public void getCurrentUser(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("account/verify_credentials.json");
+		RequestParams params = new RequestParams();
+		client.get(apiUrl, params, handler);
+	}
+
+	public void retweet(Tweet tweet, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/retweet/" + tweet.getUid() + ".json");
+		RequestParams params = new RequestParams();
+		client.post(apiUrl, params, handler);
+	}
+
+	public void unRetweet(Tweet tweet, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("statuses/destroy/" + tweet.getRetweetId() + ".json");
+		RequestParams params = new RequestParams();
+		client.post(apiUrl, params, handler);
+	}
+
+	public void favorite(Tweet tweet, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("favorites/create.json");
+		RequestParams params = new RequestParams();
+		params.put("id", tweet.getUid());
+		client.post(apiUrl, params, handler);
+	}
+
+	public void unFavorite(Tweet tweet, AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("favorites/destroy.json");
+		RequestParams params = new RequestParams();
+		params.put("id", tweet.getUid());
+		client.post(apiUrl, params, handler);
+	}
+
+	public void tweet(String tweetContent, AsyncHttpResponseHandler handler) {
+        reply(tweetContent, -1, handler);
+    }
+
+    public void reply(String tweetContent, long replyToId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("statuses/update.json");
+        RequestParams params = new RequestParams();
+        params.put("status", tweetContent);
+
+        if (replyToId > 0) {
+            params.put("in_reply_to_status_id", replyToId);
+        }
+        client.post(apiUrl, params, handler);
+    }
 }
+
