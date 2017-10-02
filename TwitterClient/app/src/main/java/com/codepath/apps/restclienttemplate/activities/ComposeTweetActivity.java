@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -136,10 +137,16 @@ public class ComposeTweetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() > 0) {
-                    tvWordNumber.setText(String.valueOf(s.length()));
+                int leftChars = TWEET_LENGTH_MAX - s.length();
+                tvWordNumber.setText(String.valueOf(leftChars));
+                if (leftChars < 0) {
+                    etTweet.setTextColor(Color.RED);
+                    btnTweet.setEnabled(false);
+                    tvWordNumber.setTextColor(Color.BLUE);
                 } else {
-                    tvWordNumber.setText("");
+                    etTweet.setTextColor(Color.BLACK);
+                    btnTweet.setEnabled(true);
+                    tvWordNumber.setTextColor(Color.GRAY);
                 }
             }
         });

@@ -2,6 +2,9 @@
 <resources>
     <color name="colorPrimary">#00ACED</color>
     <color name="colorPrimaryDark">#0084B4</color>
+    <color name="red" type="color">#FF0000</color>
+    <color name="blue" type="color">#0000FF</color>
+    <color name="black" type="color">#000000</color>
     <item name="tweet" type="color">#00aced</item>
     <item name="retweet" type="color">#0084B4</item>
     <item name="white" type="color">#FFFFFF</item>
