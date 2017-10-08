@@ -12,8 +12,8 @@ import com.haibo.mobile.android.twitterredux.R;
 public class TweetWithMediaViewHolder extends TweetViewHolder {
     protected ImageView ivMedia;
 
-    public TweetWithMediaViewHolder(View view) {
-        super(view);
+    public TweetWithMediaViewHolder(final View view, final TweetAdapter.TweetAdapterListener mListener) {
+        super(view, mListener);
         ivMedia = (ImageView)view.findViewById(R.id.ivMedia);
     }
 

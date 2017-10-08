@@ -2,23 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <item
-        android:id="@+id/tweetIcon"
-        android:icon="@drawable/tweet_icon"
-        android:title="@string/app_name"
-        android:visible="true"
-        app:showAsAction="always" />
+    <!--<item-->
+        <!--android:id="@+id/tweetIcon"-->
+        <!--android:icon="@drawable/tweet_icon"-->
+        <!--android:title="@string/app_name"-->
+        <!--android:visible="true"-->
+        <!--app:showAsAction="always" />-->
 
     <item
         android:id="@+id/email"
         android:icon="@drawable/email"
-        android:title="New Tweet."
+        android:title="Email."
         app:showAsAction="always" />
 
     <item
         android:id="@+id/profile"
         android:icon="@drawable/profile"
-        android:title="New Tweet."
+        android:title="Profile."
         app:showAsAction="always" />
 
     <item

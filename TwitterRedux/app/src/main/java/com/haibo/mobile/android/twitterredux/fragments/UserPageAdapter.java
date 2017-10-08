@@ -20,7 +20,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.Log;
 
 import com.haibo.mobile.android.twitterredux.R;
 
@@ -28,27 +27,35 @@ import com.haibo.mobile.android.twitterredux.R;
  * Created by Haibo(Tristan) Yan on 10/8/17.
  */
 
-public class TweetsPageAdapter extends FragmentPagerAdapter {
+public class UserPageAdapter extends FragmentPagerAdapter {
     private final String[] tabTitles;
 
     private Context context;
 
-    public TweetsPageAdapter(FragmentManager fm, Context context) {
+    private Long userId;
+
+    private String screenName;
+
+    public UserPageAdapter(FragmentManager fm, Context context, Long userId, String screenName) {
         super(fm);
         this.context = context;
         tabTitles = new String[] {
-            context.getResources().getString(R.string.tab_home_timeline),
-                context.getResources().getString(R.string.tab_mentions_timeline)
+                context.getResources().getString(R.string.tab_tweets),
+                context.getResources().getString(R.string.tab_photos),
+                context.getResources().getString(R.string.tab_favorites)
         };
+        this.userId = userId;
+        this.screenName = screenName;
     }
-
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new HomeTimelineFragment();
+                return UserTimelineFragment.newInstance(screenName);
             case 1:
-                return new MentionsTimelineFragment();
+                return PhotoFragment.newInstance(screenName);
+            case 2:
+                return FavoriteTimelineFragment.newInstance(screenName);
         }
         return null;
     }

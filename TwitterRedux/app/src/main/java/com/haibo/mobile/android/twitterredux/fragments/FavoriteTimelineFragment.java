@@ -21,7 +21,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.haibo.mobile.android.twitterredux.TwitterApplication;
-import com.haibo.mobile.android.twitterredux.TwitterClient;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -29,32 +28,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
 /**
- * Created by Haibo(Tristan) Yan on 10/7/17.
+ * Created by Haibo(Tristan) Yan on 10/8/17.
  */
 
-public class HomeTimelineFragment extends TweetsListFragment {
-
-
+public class FavoriteTimelineFragment extends TweetsListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         client = TwitterApplication.getRestClient();
     }
 
-    public static HomeTimelineFragment newInstance() {
+    public static FavoriteTimelineFragment newInstance(String screenName) {
         Bundle args = new Bundle();
-        HomeTimelineFragment fragment = new HomeTimelineFragment();
+        args.putString("screen_name", screenName);
+        FavoriteTimelineFragment fragment = new FavoriteTimelineFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
+    @Override
     protected void populateTweets() {
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        String screenName = getArguments().getString("screen_name");
+        client.getUserTimeline(screenName, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
@@ -66,9 +67,14 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 final JSONArray result = response;
                 try {
                     List<Tweet> newTweets = Tweet.fromJSONArray(result);
-                    Log.i("INFO", String.valueOf(newTweets.size()));
+                    List<Tweet> favoriteTweets = new ArrayList<>();
+                    for (Tweet tweet : newTweets) {
+                        if(tweet.isFavorited()) {
+                            favoriteTweets.add(tweet);
+                        }
+                    }
                     lastSinceId = newTweets.get(newTweets.size() - 1).getUid();
-                    tweets.addAll(newTweets);
+                    tweets.addAll(favoriteTweets);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -26,12 +26,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.haibo.mobile.android.twitterredux.R;
+import com.haibo.mobile.android.twitterredux.fragments.TweetsListFragment;
 import com.haibo.mobile.android.twitterredux.fragments.TweetsPageAdapter;
+import com.haibo.mobile.android.twitterredux.models.Tweet;
 
-import static com.haibo.mobile.android.twitterredux.fragments.TweetsListFragment.NEW_TWEET_REQUEST_CODE;
 
-public class TwitterActivity extends AppCompatActivity {
-//    TweetsListFragment tweetsListFragment;
+public class TwitterActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectiedListener {
+
+    public static final int NEW_TWEET_REQUEST_CODE = 20;
+
+    public static final int PROFILE_REQUEST_CODE = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +44,8 @@ public class TwitterActivity extends AppCompatActivity {
 
         // Find the toolbar view inside the activity layout
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setLogo(R.drawable.twitter_icon);
+//        toolbar.setTitle(R.string.app_name);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
         setSupportActionBar(toolbar);
@@ -65,12 +71,21 @@ public class TwitterActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.newTweet:
-                Intent intent = new Intent(this, ComposeTweetActivity.class);
-                startActivityForResult(intent, NEW_TWEET_REQUEST_CODE);
+                Intent newTweetIntent = new Intent(this, ComposeTweetActivity.class);
+                startActivityForResult(newTweetIntent, NEW_TWEET_REQUEST_CODE);
+                return true;
+            case R.id.profile:
+                Intent showProfileIntent = new Intent(this, ProfileActivity.class);
+                startActivity(showProfileIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    public void onTweetSelected(Tweet tweet) {
+
     }
 }

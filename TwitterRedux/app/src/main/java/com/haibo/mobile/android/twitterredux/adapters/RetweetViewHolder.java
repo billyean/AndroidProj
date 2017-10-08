@@ -12,8 +12,8 @@ import com.haibo.mobile.android.twitterredux.R;
 public class RetweetViewHolder extends TweetViewHolder {
     protected TextView tvRetweetedBy;
 
-    public RetweetViewHolder(View view) {
-        super(view);
+    public RetweetViewHolder(final View view, final TweetAdapter.TweetAdapterListener mListener) {
+        super(view, mListener);
         tvRetweetedBy = (TextView)view.findViewById(R.id.tvRetweetedBy);
     }
 

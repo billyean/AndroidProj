@@ -29,19 +29,26 @@ import cz.msebera.android.httpclient.Header;
  * Created by Haibo(Tristan) Yan on 10/1/17.
  */
 
-public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int REQUEST_CODE = 40;
 
     private Fragment fragment;
 
     private List<Tweet> tweets;
 
+    private TweetAdapterListener mListener;
+
     private final int TWEET_WITHOUT_MEDIA = 0, TWEET_WITH_MEDIA = 1, TWEET_WITH_VIDEO = 2, RETWEET_WITHOUT_MEDIA = 3,
             RETWEET_WITH_MEDIA = 4, RETWEET_WITH_VIDEO = 5;
 
-    public  ComplexRecyclerViewAdapter(Fragment fragment, List<Tweet> tweets) {
+    public interface TweetAdapterListener {
+        public void onItemSelected(View view, int position);
+    }
+
+    public TweetAdapter(Fragment fragment, List<Tweet> tweets, TweetAdapterListener listener) {
         this.fragment = fragment;
         this.tweets = tweets;
+        this.mListener = listener;
     }
 
     @Override
@@ -75,27 +82,27 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         switch (viewType) {
             case RETWEET_WITH_MEDIA:
                 View v1 = inflater.inflate(R.layout.item_retweet_with_media, parent, false);
-                viewHolder = new RetweetWithMediaViewHolder(v1);
+                viewHolder = new RetweetWithMediaViewHolder(v1, mListener);
                 break;
             case RETWEET_WITH_VIDEO:
                 View v2 = inflater.inflate(R.layout.item_retweet_with_video, parent, false);
-                viewHolder = new RetweetWithVideoViewHolder(v2);
+                viewHolder = new RetweetWithVideoViewHolder(v2, mListener);
                 break;
             case RETWEET_WITHOUT_MEDIA:
                 View v3 = inflater.inflate(R.layout.item_retweet, parent, false);
-                viewHolder = new RetweetViewHolder(v3);
+                viewHolder = new RetweetViewHolder(v3, mListener);
                 break;
             case TWEET_WITH_MEDIA:
                 View v4 = inflater.inflate(R.layout.item_tweet_with_media, parent, false);
-                viewHolder = new TweetWithMediaViewHolder(v4);
+                viewHolder = new TweetWithMediaViewHolder(v4, mListener);
                 break;
             case TWEET_WITH_VIDEO:
                 View v5 = inflater.inflate(R.layout.item_tweet_with_video, parent, false);
-                viewHolder = new TweetWithVideoViewHolder(v5);
+                viewHolder = new TweetWithVideoViewHolder(v5, mListener);
                 break;
             default:
                 View v6 = inflater.inflate(R.layout.item_tweet, parent, false);
-                viewHolder = new TweetViewHolder(v6);
+                viewHolder = new TweetViewHolder(v6, mListener);
                 break;
         }
 

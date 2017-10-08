@@ -12,8 +12,8 @@ import com.haibo.mobile.android.twitterredux.R;
 public class RetweetWithVideoViewHolder extends RetweetViewHolder {
     protected VideoView vvVideo;
 
-    public RetweetWithVideoViewHolder(View view) {
-        super(view);
+    public RetweetWithVideoViewHolder(final View view, final TweetAdapter.TweetAdapterListener mListener) {
+        super(view, mListener);
         vvVideo = (VideoView)view.findViewById(R.id.vvVideo);
     }
 }

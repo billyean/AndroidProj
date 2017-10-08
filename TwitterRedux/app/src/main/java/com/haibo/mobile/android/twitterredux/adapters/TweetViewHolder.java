@@ -123,7 +123,7 @@ public class TweetViewHolder extends RecyclerView.ViewHolder {
 
     protected TextView tvFavoriteCount;
 
-    public TweetViewHolder(View view) {
+    public TweetViewHolder(final View view, final TweetAdapter.TweetAdapterListener mListener) {
         super(view);
 
         ivProfileImage = (ImageView)view.findViewById(R.id.ivProfileImage);
@@ -140,5 +140,15 @@ public class TweetViewHolder extends RecyclerView.ViewHolder {
         tvReplyCount = (TextView)view.findViewById(R.id.tvReplyCount);
         tvRetweetCount = (TextView)view.findViewById(R.id.tvRetweetCount);
         tvFavoriteCount = (TextView)view.findViewById(R.id.tvFavoriteCount);
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (null != mListener) {
+                    int position = getAdapterPosition();
+                    mListener.onItemSelected(view, position);
+                }
+            }
+        });
     }
 }

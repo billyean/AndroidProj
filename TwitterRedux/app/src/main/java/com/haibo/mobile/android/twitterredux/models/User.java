@@ -18,6 +18,14 @@ public class User {
 
     public String profileImageUrl;
 
+    private String profileBannerUrl;
+
+    private String description;
+
+    private Long followings;
+
+    private Long followers;
+
     public static User fromJSON(JSONObject jsonObject) throws JSONException {
         User user = new User();
 
@@ -25,6 +33,13 @@ public class User {
         user.uid = jsonObject.getLong("id");
         user.screenName = jsonObject.getString("screen_name");
         user.profileImageUrl = jsonObject.getString("profile_image_url");
+        if (jsonObject.has("profile_banner_url"))
+            user.profileBannerUrl = jsonObject.getString("profile_banner_url");
+        user.description = jsonObject.getString("description");
+        if (jsonObject.has("friends_count"))
+            user.followings = jsonObject.getLong("friends_count");
+        if (jsonObject.has("followers_count"))
+            user.followers = jsonObject.getLong("followers_count");
         return user;
     }
 
@@ -58,5 +73,37 @@ public class User {
 
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
+    }
+
+    public String getProfileBannerUrl() {
+        return profileBannerUrl;
+    }
+
+    public void setProfileBannerUrl(String profileBannerUrl) {
+        this.profileBannerUrl = profileBannerUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(Long followings) {
+        this.followings = followings;
+    }
+
+    public Long getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Long followers) {
+        this.followers = followers;
     }
 }

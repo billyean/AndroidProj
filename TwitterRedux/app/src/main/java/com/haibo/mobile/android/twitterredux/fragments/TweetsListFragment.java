@@ -5,40 +5,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.haibo.mobile.android.twitterredux.R;
 import com.haibo.mobile.android.twitterredux.TwitterApplication;
 import com.haibo.mobile.android.twitterredux.TwitterClient;
-import com.haibo.mobile.android.twitterredux.adapters.ComplexRecyclerViewAdapter;
+import com.haibo.mobile.android.twitterredux.adapters.TweetAdapter;
 import com.haibo.mobile.android.twitterredux.listeners.EndlessRecyclerViewScrollListener;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
-import com.loopj.android.http.JsonHttpResponseHandler;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/6/17.
  */
 
-public abstract class TweetsListFragment extends Fragment {
+public abstract class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
     protected static final int TWEET_NUMBER_IN_PAGE = 25;
-
-    public static final int NEW_TWEET_REQUEST_CODE = 20;
 
     public static final int RETWEET_REQUEST_CODE = 40;
 
-    ComplexRecyclerViewAdapter adapter;
+    TweetAdapter adapter;
 
     RecyclerView rvTweets;
 
@@ -50,6 +41,12 @@ public abstract class TweetsListFragment extends Fragment {
     private EndlessRecyclerViewScrollListener scrollListener;
 
     protected TwitterClient client;
+
+    private TweetSelectiedListener tweetSelectiedListener;
+
+    public interface TweetSelectiedListener {
+        public void onTweetSelected(Tweet tweet);
+    }
 
     @Nullable
     @Override
@@ -73,7 +70,7 @@ public abstract class TweetsListFragment extends Fragment {
         rvTweets.addOnScrollListener(scrollListener);
 
         tweets = new ArrayList<>();
-        adapter = new ComplexRecyclerViewAdapter(this, tweets);
+        adapter = new TweetAdapter(this, tweets, this);
         rvTweets.setAdapter(adapter);
 
         client = TwitterApplication.getRestClient();
@@ -91,4 +88,10 @@ public abstract class TweetsListFragment extends Fragment {
     }
 
     protected abstract void populateTweets() ;
+
+    @Override
+    public void onItemSelected(View view, int position) {
+        Tweet tweet = tweets.get(position);
+        ((TweetSelectiedListener)getActivity()).onTweetSelected(tweet);
+    }
 }
