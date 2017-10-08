@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.haibo.mobile.android.twitterredux.R;
+import com.haibo.mobile.android.twitterredux.TwitterApplication;
 import com.haibo.mobile.android.twitterredux.TwitterClient;
 import com.haibo.mobile.android.twitterredux.adapters.ComplexRecyclerViewAdapter;
 import com.haibo.mobile.android.twitterredux.listeners.EndlessRecyclerViewScrollListener;
@@ -33,9 +34,9 @@ import cz.msebera.android.httpclient.Header;
 public abstract class TweetsListFragment extends Fragment {
     protected static final int TWEET_NUMBER_IN_PAGE = 25;
 
-    protected static final int NEW_TWEET_REQUEST_CODE = 20;
+    public static final int NEW_TWEET_REQUEST_CODE = 20;
 
-    protected static final int RETWEET_REQUEST_CODE = 40;
+    public static final int RETWEET_REQUEST_CODE = 40;
 
     ComplexRecyclerViewAdapter adapter;
 
@@ -48,11 +49,13 @@ public abstract class TweetsListFragment extends Fragment {
     // Store a member variable for the listener
     private EndlessRecyclerViewScrollListener scrollListener;
 
+    protected TwitterClient client;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragments_tweets_list, container);
+        View view = inflater.inflate(R.layout.fragments_tweets_list, null);
 
         rvTweets = (RecyclerView)view.findViewById(R.id.rvTweets);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -72,7 +75,10 @@ public abstract class TweetsListFragment extends Fragment {
         tweets = new ArrayList<>();
         adapter = new ComplexRecyclerViewAdapter(this, tweets);
         rvTweets.setAdapter(adapter);
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        client = TwitterApplication.getRestClient();
+        populateTweets();
+        return view;
     }
 
     public void loadNextDataFromApi(int offset) {

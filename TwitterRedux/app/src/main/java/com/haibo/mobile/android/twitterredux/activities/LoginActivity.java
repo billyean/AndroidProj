@@ -23,12 +23,13 @@ import android.view.View;
 
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 import com.haibo.mobile.android.twitterredux.R;
+import com.haibo.mobile.android.twitterredux.TwitterClient;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/7/17.
  */
 
-public class LoginActivity extends OAuthLoginActionBarActivity {
+public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient>  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

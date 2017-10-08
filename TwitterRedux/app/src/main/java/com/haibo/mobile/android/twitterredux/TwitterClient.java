@@ -18,10 +18,11 @@ package com.haibo.mobile.android.twitterredux;
 
 import android.content.Context;
 
+import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.codepath.oauth.OAuthBaseClient;
+import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.api.BaseApi;
-import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -32,8 +33,8 @@ import com.loopj.android.http.RequestParams;
 public class TwitterClient extends OAuthBaseClient {
     public static final BaseApi REST_API_INSTANCE = TwitterApi.instance(); // Change this
     public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
-    public static final String REST_CONSUMER_KEY = "ZWVJBiChGAjuwlBaczVwSywK7";       // Change this
-    public static final String REST_CONSUMER_SECRET = "zN3jpJzX9TfyUo5uV2ixMynvy7Qu3x6hRlPrZ1yVMxXs2ZgLdl"; // Change this
+    public static final String REST_CONSUMER_KEY = "rlWMPh3gz1jeoE0ArS7io8hVT";       // Change this
+    public static final String REST_CONSUMER_SECRET = "FnGTPUKj1giaamWrSvidHTTTb8ZQENjNlHgIIgegMEiLmXBRIr"; // Change this
 
     // Landing page to indicate the OAuth flow worked in case Chrome for Android 25+ blocks navigation back to the app.
     public static final String FALLBACK_URL = "https://github.com/billyean/codepath";
@@ -52,7 +53,7 @@ public class TwitterClient extends OAuthBaseClient {
 
     // CHANGE THIS
     // DEFINE METHODS for different API endpoints here
-    public void getHomeTimeline (AsyncHttpResponseHandler handler, int count, long sinceId) {
+    public void getHomeTimeline(AsyncHttpResponseHandler handler, int count, long sinceId) {
         String apiUrl = getApiUrl("statuses/home_timeline.json");
         // Can specify query string params directly or through RequestParams.
         RequestParams params = new RequestParams();

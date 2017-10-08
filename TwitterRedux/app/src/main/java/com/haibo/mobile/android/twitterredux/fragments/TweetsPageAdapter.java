@@ -20,6 +20,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/8/17.
@@ -39,6 +40,7 @@ public class TweetsPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        Log.i("INFO", String.format("postion = %d", position));
         switch (position) {
             case 0:
                 return new HomeTimelineFragment();

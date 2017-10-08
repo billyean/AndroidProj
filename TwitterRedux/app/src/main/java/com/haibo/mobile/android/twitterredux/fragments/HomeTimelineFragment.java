@@ -38,7 +38,7 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class HomeTimelineFragment extends TweetsListFragment {
-    protected TwitterClient client;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
