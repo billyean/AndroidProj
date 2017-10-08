@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/ivRetweetIcon"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="35dp"
+        android:layout_alignParentTop="true"
+        app:srcCompat="@drawable/retweet" />
+
+    <TextView
+        android:id="@+id/tvRetweetedBy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/ivRetweetIcon"
+        tools:text="SFBART Retweeted" />
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignEnd="@id/ivRetweetIcon"
+        android:layout_below="@+id/ivRetweetIcon"
+        app:srcCompat="@drawable/ic_launcher" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/ivProfileImage"
+        android:layout_alignStart="@id/tvRetweetedBy"
+        tools:text="GoldenStateWarriors" />
+
+    <TextView
+        android:id="@+id/tvTweet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:layout_below="@+id/tvUsername"
+        android:layout_marginLeft="8dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        tools:text="IT'S GAME DAY! The Dubs host \@dallasmavs in a Western Conferences showdown. PREVIEW \&amp; TIX >> https://t.co/fN5W1a8kTs" />
+
+    <TextView
+        android:id="@+id/tvAT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvTweet"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/tvUsername"
+        tools:text="\@warriors" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/tvAT"
+        android:layout_marginRight="16dp"
+        android:layout_alignParentEnd="true"
+        tools:text="9h" />
+
+    <LinearLayout
+        android:id="@+id/rlActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_alignStart="@+id/tvTweet"
+        android:layout_below="@+id/tvTweet"
+        android:layout_margin="10dp">
+        <ImageView
+            android:id="@+id/ivReply"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:srcCompat="@drawable/reply" />
+
+        <TextView
+            android:id="@+id/tvReplyCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/ivReply"
+            tools:text="1" />
+
+        <ImageView
+            android:id="@+id/ivRetweet"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="60dp"
+            app:srcCompat="@drawable/retweet" />
+
+        <TextView
+            android:id="@+id/tvRetweetCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/ivRetweet"
+            tools:text="83" />
+
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginLeft="60dp"
+            app:srcCompat="@drawable/favorite" />
+
+        <TextView
+            android:id="@+id/tvFavoriteCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/ivFavorite"
+            tools:text="43" />
+    </LinearLayout>
+</RelativeLayout>
