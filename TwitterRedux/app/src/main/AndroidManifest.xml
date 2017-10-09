@@ -39,6 +39,7 @@
             android:name=".activities.TwitterActivity"
             android:label="" />
         <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.ComposeTweetActivity"></activity>
     </application>
 
 </manifest>

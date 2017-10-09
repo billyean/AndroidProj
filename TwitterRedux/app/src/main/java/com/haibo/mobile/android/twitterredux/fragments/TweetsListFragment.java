@@ -16,6 +16,7 @@ import com.haibo.mobile.android.twitterredux.TwitterClient;
 import com.haibo.mobile.android.twitterredux.adapters.TweetAdapter;
 import com.haibo.mobile.android.twitterredux.listeners.EndlessRecyclerViewScrollListener;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
+import com.haibo.mobile.android.twitterredux.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,9 @@ import java.util.List;
  * Created by Haibo(Tristan) Yan on 10/6/17.
  */
 
-public abstract class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
+public abstract class TweetsListFragment extends Fragment implements
+        TweetAdapter.TweetAdapterListener, TweetAdapter.TweetReplyListener, TweetAdapter.ProfileSelectedListener{
     protected static final int TWEET_NUMBER_IN_PAGE = 25;
-
-    public static final int RETWEET_REQUEST_CODE = 40;
 
     TweetAdapter adapter;
 
@@ -46,6 +46,14 @@ public abstract class TweetsListFragment extends Fragment implements TweetAdapte
 
     public interface TweetSelectiedListener {
         public void onTweetSelected(Tweet tweet);
+    }
+
+    public interface ReplyTweetListener {
+        public void replyTweet(Tweet tweet);
+    }
+
+    public interface ProfileSelectiedListener {
+        public void onProfileSelected(User user);
     }
 
     @Nullable
@@ -70,7 +78,7 @@ public abstract class TweetsListFragment extends Fragment implements TweetAdapte
         rvTweets.addOnScrollListener(scrollListener);
 
         tweets = new ArrayList<>();
-        adapter = new TweetAdapter(this, tweets, this);
+        adapter = new TweetAdapter(this, tweets, this, this, this);
         rvTweets.setAdapter(adapter);
 
         client = TwitterApplication.getRestClient();
@@ -93,5 +101,17 @@ public abstract class TweetsListFragment extends Fragment implements TweetAdapte
     public void onItemSelected(View view, int position) {
         Tweet tweet = tweets.get(position);
         ((TweetSelectiedListener)getActivity()).onTweetSelected(tweet);
+    }
+
+    @Override
+    public void onReply(int position) {
+        Tweet tweet = tweets.get(position);
+        ((ReplyTweetListener)getActivity()).replyTweet(tweet);
+    }
+
+    @Override
+    public void onProfileSelected(int position) {
+        Tweet tweet = tweets.get(position);
+        ((ProfileSelectiedListener)getActivity()).onProfileSelected(tweet.getUser());
     }
 }

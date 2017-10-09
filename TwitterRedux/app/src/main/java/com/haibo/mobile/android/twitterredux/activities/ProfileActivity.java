@@ -22,6 +22,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,6 +65,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         Long userId = getIntent().getLongExtra("user_id", 0);
         String screenName = getIntent().getStringExtra("screen_name");
+
+        Log.i("INFO", String.format("user_id = %d, screenName = %s", userId, screenName));
 
         ivProfileBG = (ImageView) findViewById(R.id.ivProfileBG);
         ivProfile = (ImageView) findViewById(R.id.ivProfile);

@@ -29,13 +29,18 @@ import com.haibo.mobile.android.twitterredux.R;
 import com.haibo.mobile.android.twitterredux.fragments.TweetsListFragment;
 import com.haibo.mobile.android.twitterredux.fragments.TweetsPageAdapter;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
+import com.haibo.mobile.android.twitterredux.models.User;
 
+import org.parceler.Parcels;
 
-public class TwitterActivity extends AppCompatActivity implements TweetsListFragment.TweetSelectiedListener {
+public class TwitterActivity extends AppCompatActivity implements
+        TweetsListFragment.TweetSelectiedListener, TweetsListFragment.ReplyTweetListener,
+        TweetsListFragment.ProfileSelectiedListener {
+    public static final int RETWEET_REQUEST_CODE = 40;
 
     public static final int NEW_TWEET_REQUEST_CODE = 20;
 
-    public static final int PROFILE_REQUEST_CODE = 40;
+    public static final int PROFILE_REQUEST_CODE = 60;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,5 +92,20 @@ public class TwitterActivity extends AppCompatActivity implements TweetsListFrag
     @Override
     public void onTweetSelected(Tweet tweet) {
 
+    }
+
+    @Override
+    public void replyTweet(Tweet tweet) {
+        Intent intent = new Intent(this, ComposeTweetActivity.class);
+        intent.putExtra("replyToUser", Parcels.wrap(tweet.getUser()));
+        startActivityForResult(intent, RETWEET_REQUEST_CODE);
+    }
+
+    @Override
+    public void onProfileSelected(User user) {
+        Intent showProfileIntent = new Intent(this, ProfileActivity.class);
+        showProfileIntent.putExtra("user_id", user.getUid());
+        showProfileIntent.putExtra("screen_name", user.getScreenName());
+        startActivity(showProfileIntent);
     }
 }

@@ -14,12 +14,14 @@ import android.widget.Toast;
 import com.haibo.mobile.android.twitterredux.R;
 import com.haibo.mobile.android.twitterredux.TwitterApplication;
 import com.haibo.mobile.android.twitterredux.TwitterClient;
+import com.haibo.mobile.android.twitterredux.activities.ComposeTweetActivity;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -38,6 +40,10 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private TweetAdapterListener mListener;
 
+    private TweetReplyListener replyListener;
+
+    private ProfileSelectedListener profileSelectedListener;
+
     private final int TWEET_WITHOUT_MEDIA = 0, TWEET_WITH_MEDIA = 1, TWEET_WITH_VIDEO = 2, RETWEET_WITHOUT_MEDIA = 3,
             RETWEET_WITH_MEDIA = 4, RETWEET_WITH_VIDEO = 5;
 
@@ -45,10 +51,21 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public void onItemSelected(View view, int position);
     }
 
-    public TweetAdapter(Fragment fragment, List<Tweet> tweets, TweetAdapterListener listener) {
+    public interface TweetReplyListener {
+        public void onReply(int position);
+    }
+
+    public interface ProfileSelectedListener {
+        public void onProfileSelected(int position);
+    }
+
+    public TweetAdapter(Fragment fragment, List<Tweet> tweets, TweetAdapterListener listener,
+                        TweetReplyListener replyListener, ProfileSelectedListener profileSelectedListener) {
         this.fragment = fragment;
         this.tweets = tweets;
         this.mListener = listener;
+        this.replyListener = replyListener;
+        this.profileSelectedListener = profileSelectedListener;
     }
 
     @Override
@@ -143,7 +160,6 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         configureRetweetViewHolder(holder, position);
         Tweet tweet = tweets.get(position);
         Picasso.with(fragment.getContext()).load(tweet.getMediaURL()).into(holder.getIvMedia());
-
     }
 
     private void configureRetweetViewHolder(RetweetViewHolder holder, int position) {
@@ -178,11 +194,17 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    private void configureTweetViewHolder(TweetViewHolder holder, int position) {
+    private void configureTweetViewHolder(TweetViewHolder holder, final int position) {
         final Tweet tweet = tweets.get(position);
         final TweetViewHolder h = holder;
         ImageView ivProfileImage = holder.getIvProfileImage();
         Picasso.with(fragment.getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                profileSelectedListener.onProfileSelected(position);
+            }
+        });
 
         holder.getTvUsername().setText(tweet.getUser().getName());
         holder.getTvAT().setText("@" + tweet.getUser().getScreenName());
@@ -207,14 +229,12 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (0 != tweet.getFavoriteCount())
             holder.getTvFavoriteCount().setText(String.valueOf(tweet.getFavoriteCount()));
 
-//        holder.getIvReply().setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(activity, ComposeTweetActivity.class);
-//                intent.putExtra("replyToUser", Parcels.wrap(tweet.getUser()));
-//                activity.startActivityForResult(intent, RETWEET_REQUEST_CODE);
-//            }
-//        });
+        holder.getIvReply().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replyListener.onReply(position);
+            }
+        });
 
         holder.getIvRetweet().setOnClickListener(new View.OnClickListener() {
             @Override
