@@ -10,9 +10,9 @@
         <!--app:showAsAction="always" />-->
 
     <item
-        android:id="@+id/email"
+        android:id="@+id/message"
         android:icon="@drawable/email"
-        android:title="Email."
+        android:title="Message."
         app:showAsAction="always" />
 
     <item
@@ -26,7 +26,7 @@
         android:icon="@drawable/newtweet"
         android:title="New Tweet."
         app:showAsAction="always" />
-    
+
     <item
         android:id="@+id/miActionProgress"
         android:title="Loading..."

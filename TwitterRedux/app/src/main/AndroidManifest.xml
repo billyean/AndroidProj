@@ -38,8 +38,11 @@
         <activity
             android:name=".activities.TwitterActivity"
             android:label="" />
-        <activity android:name=".activities.ProfileActivity"></activity>
-        <activity android:name=".activities.ComposeTweetActivity"></activity>
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.ComposeTweetActivity" />
+        <activity android:name=".activities.SearchTweetActivity" />
+        <activity android:name=".activities.SendMessageActivity" />
+        <activity android:name=".activities.MessagesActivity"></activity>
     </application>
 
 </manifest>

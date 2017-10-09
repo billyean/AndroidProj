@@ -71,6 +71,25 @@ public class TwitterClient extends OAuthBaseClient {
         client.get(apiUrl, params, handler);
     }
 
+    public void getDirectMessages(AsyncHttpResponseHandler handler, int count, long sinceId) {
+        String apiUrl = getApiUrl("direct_messages/sent.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("count", count);
+        params.put("since_id", sinceId);
+        client.get(apiUrl, params, handler);
+    }
+
+    public void SearchTimeLine (AsyncHttpResponseHandler handler, int count, long sinceId, String q) {
+        String apiUrl = getApiUrl("search/tweets.json");
+        // Can specify query string params directly or through RequestParams.
+        RequestParams params = new RequestParams();
+        params.put("q", q);
+        params.put("count", count);
+        params.put("since_id", sinceId);
+        client.get(apiUrl, params, handler);
+    }
+
     public void getUserTimeline (String screenName, AsyncHttpResponseHandler handler, int count, long sinceId) {
         String apiUrl = getApiUrl("statuses/user_timeline.json");
         // Can specify query string params directly or through RequestParams.
@@ -143,6 +162,14 @@ public class TwitterClient extends OAuthBaseClient {
         if (replyToId > 0) {
             params.put("in_reply_to_status_id", replyToId);
         }
+        client.post(apiUrl, params, handler);
+    }
+
+    public void sendMessage(String message, long sentToId, AsyncHttpResponseHandler handler) {
+        String apiUrl = getApiUrl("direct_messages/new.json");
+        RequestParams params = new RequestParams();
+        params.put("user_id", sentToId);
+        params.put("text", message);
         client.post(apiUrl, params, handler);
     }
 }
