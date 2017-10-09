@@ -55,6 +55,7 @@ public class FavoriteTimelineFragment extends TweetsListFragment {
     @Override
     protected void populateTweets() {
         String screenName = getArguments().getString("screen_name");
+        progressUpdateListener.showProgressBar();
         client.getUserTimeline(screenName, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -79,21 +80,25 @@ public class FavoriteTimelineFragment extends TweetsListFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
         }, TWEET_NUMBER_IN_PAGE, lastSinceId); // Default start first id
     }

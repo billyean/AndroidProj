@@ -37,15 +37,14 @@
 
             <ImageView
                 android:id="@+id/ivProfileBG"
-                android:layout_alignParentLeft="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="120dp"
                 app:srcCompat="@drawable/bg" />
 
             <ImageView
                 android:id="@+id/ivProfile"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_alignLeft="@id/ivProfileBG"
                 android:layout_below="@id/ivProfileBG"
                 android:layout_marginLeft="30dp"
@@ -99,7 +98,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
 
-                android:textSize="12sp"
+                android:textSize="10sp"
                 tools:text="652" />
 
             <TextView
@@ -109,7 +108,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@id/tvFollowings"
                 android:text="FOLLOWING"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
 
             <TextView
                 android:id="@+id/tvFollowers"
@@ -117,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_toEndOf="@id/tvFollowingsTitle"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 tools:text="652" />
 
             <TextView
@@ -127,7 +126,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@id/tvFollowers"
                 android:text="FOLLOWING"
-                android:textSize="12sp" />
+                android:textSize="10sp" />
         </RelativeLayout>
 
     </RelativeLayout>

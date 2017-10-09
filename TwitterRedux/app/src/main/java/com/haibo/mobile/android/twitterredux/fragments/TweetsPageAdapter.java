@@ -23,6 +23,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
 import com.haibo.mobile.android.twitterredux.R;
+import com.haibo.mobile.android.twitterredux.activities.ProgressUpdateListener;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/8/17.
@@ -33,22 +34,29 @@ public class TweetsPageAdapter extends FragmentPagerAdapter {
 
     private Context context;
 
-    public TweetsPageAdapter(FragmentManager fm, Context context) {
+    private ProgressUpdateListener progressUpdateListener;
+
+    public TweetsPageAdapter(FragmentManager fm, Context context, ProgressUpdateListener progressUpdateListener) {
         super(fm);
         this.context = context;
         tabTitles = new String[] {
             context.getResources().getString(R.string.tab_home_timeline),
                 context.getResources().getString(R.string.tab_mentions_timeline)
         };
+        this.progressUpdateListener = progressUpdateListener;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new HomeTimelineFragment();
+                HomeTimelineFragment homeTimelineFragment = HomeTimelineFragment.newInstance();
+                homeTimelineFragment.setProgressUpdateListener(progressUpdateListener);
+                return homeTimelineFragment;
             case 1:
-                return new MentionsTimelineFragment();
+                MentionsTimelineFragment mentionsTimelineFragment = MentionsTimelineFragment.newInstance();
+                mentionsTimelineFragment.setProgressUpdateListener(progressUpdateListener);
+                return mentionsTimelineFragment;
         }
         return null;
     }

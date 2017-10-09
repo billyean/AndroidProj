@@ -18,12 +18,16 @@ package com.haibo.mobile.android.twitterredux.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.haibo.mobile.android.twitterredux.R;
@@ -40,8 +44,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements ProgressUpdateListener {
     protected TwitterClient client;
 
     private ImageView ivProfileBG;
@@ -58,6 +63,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView tvFollowers;
 
+    // Instance of the progress action-view
+    private MenuItem miActionProgressItem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +73,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         Long userId = getIntent().getLongExtra("user_id", 0);
         String screenName = getIntent().getStringExtra("screen_name");
+
+        client = TwitterApplication.getRestClient();
 
         Log.i("INFO", String.format("user_id = %d, screenName = %s", userId, screenName));
 
@@ -77,9 +87,6 @@ public class ProfileActivity extends AppCompatActivity {
         tvFollowers = (TextView) findViewById(R.id.tvFollowers);
 
 
-
-        client = TwitterApplication.getRestClient();
-
         client.getUserProfile(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -89,7 +96,9 @@ public class ProfileActivity extends AppCompatActivity {
 //                    toolbar.setTitle(user.getScreenName());
 
                     Picasso.with(ProfileActivity.this).load(user.getProfileBannerUrl()).into(ivProfileBG);
-                    Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl()).into(ivProfile);
+                    Picasso.with(ProfileActivity.this).load(user.getProfileImageUrl())
+                            .resize(45, 45)
+                            .transform(new RoundedCornersTransformation(6, 6)).into(ivProfile);
                     tvName.setText(user.getName());
                     tvScreenName.setText("@" + user.getScreenName());
                     tvDesc.setText(user.getDescription());
@@ -108,10 +117,34 @@ public class ProfileActivity extends AppCompatActivity {
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new UserPageAdapter(getSupportFragmentManager(),
-                ProfileActivity.this, userId, screenName));
+                ProfileActivity.this, userId, screenName, this));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void showProgressBar() {
+        // Show progress item
+        if (miActionProgressItem!= null)
+            miActionProgressItem.setVisible(true);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        // Hide progress item
+        if (miActionProgressItem!= null)
+            miActionProgressItem.setVisible(false);
     }
 }

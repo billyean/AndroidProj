@@ -22,6 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.haibo.mobile.android.twitterredux.R;
+import com.haibo.mobile.android.twitterredux.activities.ProgressUpdateListener;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/8/17.
@@ -36,7 +37,10 @@ public class UserPageAdapter extends FragmentPagerAdapter {
 
     private String screenName;
 
-    public UserPageAdapter(FragmentManager fm, Context context, Long userId, String screenName) {
+    private ProgressUpdateListener progressUpdateListener;
+
+    public UserPageAdapter(FragmentManager fm, Context context, Long userId, String screenName,
+                           ProgressUpdateListener progressUpdateListener) {
         super(fm);
         this.context = context;
         tabTitles = new String[] {
@@ -46,16 +50,21 @@ public class UserPageAdapter extends FragmentPagerAdapter {
         };
         this.userId = userId;
         this.screenName = screenName;
+        this.progressUpdateListener = progressUpdateListener;
     }
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return UserTimelineFragment.newInstance(screenName);
+                UserTimelineFragment userTimelineFragment = UserTimelineFragment.newInstance(screenName);
+                userTimelineFragment.setProgressUpdateListener(progressUpdateListener);
+                return userTimelineFragment;
             case 1:
                 return PhotoFragment.newInstance(screenName);
             case 2:
-                return FavoriteTimelineFragment.newInstance(screenName);
+                FavoriteTimelineFragment favoriteTimelineFragment = FavoriteTimelineFragment.newInstance(screenName);
+                favoriteTimelineFragment.setProgressUpdateListener(progressUpdateListener);
+                return favoriteTimelineFragment;
         }
         return null;
     }

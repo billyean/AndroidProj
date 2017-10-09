@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.haibo.mobile.android.twitterredux.TwitterApplication;
 import com.haibo.mobile.android.twitterredux.TwitterClient;
+import com.haibo.mobile.android.twitterredux.activities.ProgressUpdateListener;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -38,8 +39,6 @@ import cz.msebera.android.httpclient.Header;
  */
 
 public class HomeTimelineFragment extends TweetsListFragment {
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +53,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
     }
 
     protected void populateTweets() {
+        progressUpdateListener.showProgressBar();
         client.getHomeTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -73,21 +73,25 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
         }, TWEET_NUMBER_IN_PAGE, lastSinceId); // Default start first id
     }

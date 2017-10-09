@@ -26,6 +26,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 
 /**
  * Created by Haibo(Tristan) Yan on 10/1/17.
@@ -198,7 +199,9 @@ public class TweetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         final Tweet tweet = tweets.get(position);
         final TweetViewHolder h = holder;
         ImageView ivProfileImage = holder.getIvProfileImage();
-        Picasso.with(fragment.getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        Picasso.with(fragment.getContext()).load(tweet.getUser().getProfileImageUrl())
+                .transform(new RoundedCornersTransformation(6, 6))
+                .into(ivProfileImage);
         ivProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -16,31 +16,39 @@
 
 package com.haibo.mobile.android.twitterredux.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 
 import com.haibo.mobile.android.twitterredux.R;
 import com.haibo.mobile.android.twitterredux.fragments.TweetsListFragment;
 import com.haibo.mobile.android.twitterredux.fragments.TweetsPageAdapter;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
 import com.haibo.mobile.android.twitterredux.models.User;
+import com.haibo.mobile.android.twitterredux.utils.NetworkUtilities;
 
 import org.parceler.Parcels;
 
 public class TwitterActivity extends AppCompatActivity implements
         TweetsListFragment.TweetSelectiedListener, TweetsListFragment.ReplyTweetListener,
-        TweetsListFragment.ProfileSelectiedListener {
+        TweetsListFragment.ProfileSelectiedListener, ProgressUpdateListener {
     public static final int RETWEET_REQUEST_CODE = 40;
 
     public static final int NEW_TWEET_REQUEST_CODE = 20;
 
     public static final int PROFILE_REQUEST_CODE = 60;
+
+    // Instance of the progress action-view
+    private MenuItem miActionProgressItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +65,7 @@ public class TwitterActivity extends AppCompatActivity implements
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new TweetsPageAdapter(getSupportFragmentManager(),
-                TwitterActivity.this));
+                TwitterActivity.this, this));
 
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -107,5 +115,46 @@ public class TwitterActivity extends AppCompatActivity implements
         showProfileIntent.putExtra("user_id", user.getUid());
         showProfileIntent.putExtra("screen_name", user.getScreenName());
         startActivity(showProfileIntent);
+    }
+
+    public void checkNetworkAvailable() {
+        if (NetworkUtilities.isNetworkAvailable(this)) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(TwitterActivity.this).create();
+            alertDialog.setTitle("Alert Dialog");
+            alertDialog.setMessage("Mobile network is not available.");
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+
+            alertDialog.show();
+        }
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        // Store instance of the menu item containing progress
+        miActionProgressItem = menu.findItem(R.id.miActionProgress);
+        // Extract the action-view from the menu item
+        ProgressBar v =  (ProgressBar) MenuItemCompat.getActionView(miActionProgressItem);
+        // Return to finish
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public void showProgressBar() {
+        // Show progress item
+        if (miActionProgressItem!= null)
+            miActionProgressItem.setVisible(true);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        // Hide progress item
+        if (miActionProgressItem!= null)
+            miActionProgressItem.setVisible(false);
     }
 }

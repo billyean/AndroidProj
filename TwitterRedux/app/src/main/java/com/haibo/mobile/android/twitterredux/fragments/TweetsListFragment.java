@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.haibo.mobile.android.twitterredux.R;
 import com.haibo.mobile.android.twitterredux.TwitterApplication;
 import com.haibo.mobile.android.twitterredux.TwitterClient;
+import com.haibo.mobile.android.twitterredux.activities.ProgressUpdateListener;
 import com.haibo.mobile.android.twitterredux.adapters.TweetAdapter;
 import com.haibo.mobile.android.twitterredux.listeners.EndlessRecyclerViewScrollListener;
 import com.haibo.mobile.android.twitterredux.models.Tweet;
@@ -43,6 +44,12 @@ public abstract class TweetsListFragment extends Fragment implements
     protected TwitterClient client;
 
     private TweetSelectiedListener tweetSelectiedListener;
+
+    protected ProgressUpdateListener progressUpdateListener;
+
+    public void setProgressUpdateListener(ProgressUpdateListener progressUpdateListener) {
+        this.progressUpdateListener = progressUpdateListener;
+    }
 
     public interface TweetSelectiedListener {
         public void onTweetSelected(Tweet tweet);

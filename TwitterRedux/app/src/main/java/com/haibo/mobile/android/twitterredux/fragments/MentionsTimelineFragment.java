@@ -54,6 +54,7 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     }
 
     protected void populateTweets() {
+        progressUpdateListener.showProgressBar();
         client.getMentionsTimeline(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -72,21 +73,25 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 throwable.printStackTrace();
+                progressUpdateListener.hideProgressBar();
             }
         }, TWEET_NUMBER_IN_PAGE, lastSinceId); // Default start first id
     }

@@ -19,6 +19,7 @@ package com.haibo.mobile.android.twitterredux.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -82,6 +83,9 @@ public class PhotoFragment extends Fragment {
         rvPhotos = (RecyclerView)view.findViewById(R.id.rvPhotos);
         StaggeredGridLayoutManager staggeredGridLayoutManager =
                 new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        rvPhotos.addItemDecoration(itemDecoration);
         rvPhotos.setLayoutManager(staggeredGridLayoutManager);
         // Retain an instance so that you can call `resetState()` for fresh searches
         scrollListener = new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
